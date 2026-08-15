@@ -1,0 +1,4 @@
+interface:
+  display_name: "Uncertainty and Units"
+  short_description: "Check physical units and propagate measurement uncertainty"
+  default_prompt: "Use $uncertainty-and-units to audit units and propagate uncertainty through this calculation."

@@ -1,0 +1,14 @@
+{
+  "docx": "res-omml.docx",
+  "valid": true,
+  "file_size": 32915,
+  "xml_parts_checked": 3,
+  "omml_total": 209,
+  "omml_paragraphs": 9,
+  "mathml_elements": 0,
+  "raw_math_markers": 0,
+  "expected_source_formulas": 209,
+  "media_files": 0,
+  "errors": [],
+  "warnings": []
+}

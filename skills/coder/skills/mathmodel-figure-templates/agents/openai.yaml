@@ -1,0 +1,4 @@
+interface:
+  display_name: "数学建模 · 科研绘图模板"
+  short_description: "使用内置模板快速生成可复现、可投稿的数学建模科研图表"
+  default_prompt: "Use $mathmodel-figure-templates to render the most suitable bundled scientific figure template for this data."

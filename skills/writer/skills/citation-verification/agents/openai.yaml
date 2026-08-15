@@ -1,0 +1,4 @@
+interface:
+  display_name: "Citation Verification"
+  short_description: "Verify citation existence, formatting, and semantic relevance"
+  default_prompt: "Use $citation-verification to validate the references and in-text citation claims in this paper."

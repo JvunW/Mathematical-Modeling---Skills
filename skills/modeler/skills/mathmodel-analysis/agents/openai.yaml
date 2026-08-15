@@ -1,0 +1,4 @@
+interface:
+  display_name: "数学建模 · 赛题分析"
+  short_description: "系统拆解赛题、建立变量约束并产出可编码的数学模型方案"
+  default_prompt: "Use $mathmodel-analysis to analyze this problem and produce an implementation-ready mathematical model."

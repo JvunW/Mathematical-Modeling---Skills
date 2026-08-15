@@ -1,0 +1,4 @@
+interface:
+  display_name: "数学建模 · 流程与结构图"
+  short_description: "根据数学模型和结果制作技术路线、求解流程与结构示意图"
+  default_prompt: "Use $mathmodel-drawio to create the non-data diagrams needed for this modeling paper."

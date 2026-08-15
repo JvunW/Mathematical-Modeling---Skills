@@ -1,0 +1,4 @@
+interface:
+  display_name: "Statistical Analysis"
+  short_description: "Select statistical tests, check assumptions, and report results"
+  default_prompt: "Use $statistical-analysis to choose, run, and report the appropriate statistical analysis for this data."

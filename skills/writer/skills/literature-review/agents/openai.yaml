@@ -1,0 +1,4 @@
+interface:
+  display_name: "Literature Review"
+  short_description: "Run systematic reviews with verified and traceable citations"
+  default_prompt: "Use $literature-review to conduct a systematic literature review for this research question."

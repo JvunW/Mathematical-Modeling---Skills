@@ -1,0 +1,4 @@
+interface:
+  display_name: "数学建模 · 完整工作流"
+  short_description: "从赛题、建模、编码到论文验收的完整数学建模自动化工作流"
+  default_prompt: "Use $mathmodel-workflow to complete this mathematical modeling task from problem analysis through paper verification."

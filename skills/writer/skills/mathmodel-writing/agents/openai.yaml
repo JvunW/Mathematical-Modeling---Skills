@@ -1,0 +1,4 @@
+interface:
+  display_name: "数学建模 · 论文写作"
+  short_description: "结合真实结果、OpenAlex 文献与多种格式撰写竞赛论文"
+  default_prompt: "Use $mathmodel-writing to write a sourced mathematical modeling paper from the available results and figures."

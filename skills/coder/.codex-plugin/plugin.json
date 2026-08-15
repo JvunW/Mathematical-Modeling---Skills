@@ -1,0 +1,31 @@
+{
+  "name": "coder",
+  "version": "1.1.0",
+  "description": "Reproducible model implementation, debugging, testing, scientific figures, diagrams, and environment checks.",
+  "author": {
+    "name": "MathModelAgent contributors"
+  },
+  "keywords": [
+    "scientific-computing",
+    "debugging",
+    "testing",
+    "data-visualization"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "MathModel Coder",
+    "shortDescription": "Implement, test, debug, and visualize models",
+    "longDescription": "Turn mathematical models into reproducible code, execute and debug solutions, generate scientific figures and diagrams, inspect dependencies, and verify results before completion.",
+    "developerName": "MathModelAgent contributors",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Use $mathmodel-coding to implement and verify this mathematical model.",
+      "Use $mathmodel-doctor to inspect the available modeling and publishing tools."
+    ]
+  }
+}

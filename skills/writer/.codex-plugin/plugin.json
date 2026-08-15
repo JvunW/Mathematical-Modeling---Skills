@@ -1,0 +1,36 @@
+{
+  "name": "writer",
+  "version": "1.2.0",
+  "description": "OpenAlex-backed research, paper writing, native OMML DOCX export, and submission checks.",
+  "author": {
+    "name": "MathModelAgent contributors"
+  },
+  "keywords": [
+    "academic-writing",
+    "openalex",
+    "typst",
+    "latex",
+    "pandoc",
+    "docx",
+    "omml",
+    "citations"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "MathModel Writer",
+    "shortDescription": "Research, write, typeset, and verify papers",
+    "longDescription": "Search and verify scholarly literature, synthesize evidence, write mathematical modeling papers, export LaTeX math as native Word OMML, and check citations, numerical consistency, and final document quality.",
+    "developerName": "MathModelAgent contributors",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Use $mathmodel-writing to write a paper from my verified results with OpenAlex references.",
+      "Use $paper-lookup to find and preserve provenance for relevant scholarly sources.",
+      "Use $export-math-docx to export LaTeX math as native OMML equations in Word."
+    ]
+  }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Experimental Design"
+  short_description: "Design randomized, blocked, factorial, and sequential studies"
+  default_prompt: "Use $experimental-design to create an interpretable experimental design for this research question."

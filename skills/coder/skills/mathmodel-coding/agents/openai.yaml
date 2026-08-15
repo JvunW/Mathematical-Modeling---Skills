@@ -1,0 +1,4 @@
+interface:
+  display_name: "数学建模 · 编程与数据图表"
+  short_description: "实现数学模型、运行求解、验证结果并生成论文级科研图表"
+  default_prompt: "Use $mathmodel-coding to implement, run, validate, and visualize this mathematical model."

@@ -1,0 +1,31 @@
+{
+  "name": "modeler",
+  "version": "1.1.0",
+  "description": "Mathematical problem analysis, model design, statistics, experiment design, uncertainty, and workflow coordination.",
+  "author": {
+    "name": "MathModelAgent contributors"
+  },
+  "keywords": [
+    "mathematical-modeling",
+    "statistics",
+    "experimental-design",
+    "uncertainty"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "MathModel Modeler",
+    "shortDescription": "Analyze problems and design mathematical models",
+    "longDescription": "Coordinate mathematical modeling tasks, analyze problem statements and data, design models, select statistical methods, plan experiments, and audit uncertainty and units.",
+    "developerName": "MathModelAgent contributors",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Use $mathmodel-analysis to analyze this problem and design a computable model.",
+      "Use $mathmodel-workflow to coordinate a complete mathematical modeling task."
+    ]
+  }
+}

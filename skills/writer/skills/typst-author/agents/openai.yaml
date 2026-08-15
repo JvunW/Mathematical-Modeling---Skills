@@ -1,0 +1,4 @@
+interface:
+  display_name: "Typst Author"
+  short_description: "Create, compile, and troubleshoot professional Typst documents"
+  default_prompt: "Use $typst-author to create or fix this Typst document and verify that it compiles."

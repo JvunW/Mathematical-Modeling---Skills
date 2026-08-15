@@ -1,0 +1,7 @@
+interface:
+  display_name: "数学建模 · 规范知识库"
+  short_description: "查询数学建模题型选模、防错、图表和竞赛论文写作规范"
+  default_prompt: "Use $mathmodel-references to answer this question about mathematical modeling standards and common pitfalls."
+
+policy:
+  allow_implicit_invocation: false

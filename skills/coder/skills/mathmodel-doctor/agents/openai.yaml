@@ -1,0 +1,7 @@
+interface:
+  display_name: "数学建模 · 环境检查"
+  short_description: "检查 Python、论文编译器、绘图和 PDF 工具依赖是否就绪"
+  default_prompt: "Use $mathmodel-doctor to check this computer for the dependencies needed by the math modeling skills."
+
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,4 @@
+interface:
+  display_name: "数学建模 · 论文验收"
+  short_description: "提交前检查数学建模论文结构、数值、引用、编译和视觉质量"
+  default_prompt: "Use $mathmodel-verification to verify this modeling paper and report whether it is submission-ready."
