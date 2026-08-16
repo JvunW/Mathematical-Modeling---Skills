@@ -107,7 +107,7 @@ mathmodel-skills/
 | Skill | 作用 |
 | --- | --- |
 | [`mathmodel-writing`](skills/writer/skills/mathmodel-writing/SKILL.md) | 使用 Typst/LaTeX 模板组织论文，嵌入真实结果，并强制进行 OpenAlex 文献检索与核验。 |
-| [`export-math-docx`](skills/writer/skills/export-math-docx/SKILL.md) | 通过 Pandoc 将 Markdown/LaTeX 数学结构导出为 DOCX 原生 OMML，并验证公式没有丢失或残留。 |
+| [`export-math-docx`](skills/writer/skills/export-math-docx/SKILL.md) | 通过 Pandoc 将 Markdown/LaTeX 数学结构导出为 DOCX 原生 OMML，并在发布前验证公式与论文图片均未丢失。 |
 | [`mathmodel-verification`](skills/writer/skills/mathmodel-verification/SKILL.md) | 检查论文结构、图表、数值、占位符、引用、编译结果、Word OMML 和最终页面质量。 |
 | [`typst-author`](skills/writer/skills/typst-author/SKILL.md) | 创建、编辑、编译和排错 Typst，附带本地语法参考。 |
 | [`paper-lookup`](skills/writer/skills/paper-lookup/SKILL.md) | 查询 OpenAlex、Crossref、PubMed、Semantic Scholar、arXiv 等学术来源并保留 provenance。 |
@@ -146,7 +146,7 @@ pingouin statsmodels pint uncertainties pyDOE3
 | --- | --- | --- |
 | Typst CLI | 编译 `.typ` 论文 | 选择 Typst 时 |
 | XeLaTeX/TeX 发行版 | 编译 `.tex` 论文 | 选择 LaTeX 时 |
-| Pandoc 或 `pypandoc-binary` | 将 Markdown/LaTeX 数学结构导出为 Word 原生 OMML | 选择 DOCX 交付时 |
+| Pandoc 或 `pypandoc-binary` | 将 Markdown/LaTeX 数学结构与图片导出为 Word 原生 OMML，并核对图片嵌入 | 选择 DOCX 交付时 |
 | Draw.io Desktop CLI | 将 `.drawio` 导出为 PDF | 可选；源文件生成不需要 |
 | Poppler `pdftoppm` | PDF 转 PNG 视觉检查 | 推荐，三选一 |
 | MuPDF `mutool` | PDF 转 PNG 备用 | 可选，三选一 |

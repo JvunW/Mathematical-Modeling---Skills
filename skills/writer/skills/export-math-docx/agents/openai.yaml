@@ -1,4 +1,4 @@
 interface:
-  display_name: "导出数学公式 Word"
-  short_description: "将 LaTeX 数学公式转换为 Word 原生 OMML"
-  default_prompt: "使用 $export-math-docx 将含 LaTeX 数学公式的论文导出为带原生 OMML 公式的 DOCX。"
+  display_name: "导出数学公式与图片 Word"
+  short_description: "将 LaTeX 公式转为 Word 原生 OMML，并校验论文图片完整嵌入"
+  default_prompt: "使用 $export-math-docx 将含 LaTeX 数学公式和图片的论文导出为 DOCX，并验证原生 OMML 公式及图片完整性。"

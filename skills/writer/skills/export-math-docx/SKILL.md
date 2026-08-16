@@ -1,6 +1,6 @@
 ---
 name: export-math-docx
-description: "将包含 LaTeX 数学公式的 Markdown 或 LaTeX 论文通过 Pandoc 导出为 .docx，并验证公式已成为 Word 原生可编辑 OMML。用于需要 Word 交付、DOCX 比赛模板、LaTeX/Markdown 转 Word、Pandoc 数学转换、OMML 公式校验或排查公式仍是原始文本的任务；不用于把 Typst 源文件直接转换为 DOCX。"
+description: "将包含 LaTeX 数学公式和论文图片的 Markdown 或 LaTeX 论文通过 Pandoc 导出为 .docx，验证公式已成为 Word 原生可编辑 OMML，并阻止缺图或图片未嵌入的 DOCX 发布。用于需要 Word 交付、DOCX 比赛模板、LaTeX/Markdown 转 Word、Pandoc 数学转换、OMML 公式校验、论文图片嵌入或排查公式/图片丢失的任务；不用于把 Typst 源文件直接转换为 DOCX。"
 ---
 
 # 导出数学公式 Word 文档
@@ -10,7 +10,7 @@ description: "将包含 LaTeX 数学公式的 Markdown 或 LaTeX 论文通过 Pa
 ## 工作流程
 
 1. 确认输入、输出和模板。
-   - 优先使用 UTF-8 Markdown，行内公式写成 `$...$`，行间公式写成 `$$...$$`。
+   - 优先使用 UTF-8 Markdown；支持 `$...$`、`$$...$$`、`\(...\)` 和 `\[...\]` 数学定界符。
    - 允许输入 `.tex`，但只保证 Pandoc LaTeX reader 能解析的内容；复杂宏和依赖宏包的版式先按 `references/compatibility.md` 处理。
    - 将比赛提供的纯样式 Word 文件作为 `--reference-doc`。若模板正文包含必须保留的封面字段或固定内容，先阅读兼容性说明，不要假设 Pandoc 会保留模板正文。
 
@@ -22,7 +22,10 @@ description: "将包含 LaTeX 数学公式的 Markdown 或 LaTeX 论文通过 Pa
 
    脚本依次查找 `--pandoc` 指定路径、`PANDOC_PATH`、系统 `pandoc` 和 `pypandoc`/`pypandoc-binary` 自带可执行文件。全部缺失时，说明缺失项并在获得用户许可后再安装。
 
-3. 执行转换。把本 `SKILL.md` 所在目录解析为 `<SKILL_DIR>`，传入绝对路径或当前工作区内明确路径：
+3. 确认图片资源并执行转换。
+   - 脚本先通过 Pandoc AST 枚举 Markdown、HTML 或 LaTeX 图片引用，再按源文件目录和每个 `--resource-path` 依次解析。
+   - 任一源图片缺失时必须停止，不得继续生成无图 DOCX，也不得用无关图片或虚构科研图替代。
+   - 把本 `SKILL.md` 所在目录解析为 `<SKILL_DIR>`，传入绝对路径或当前工作区内明确路径：
 
    ```text
    python "<SKILL_DIR>/scripts/export_docx.py" \
@@ -35,7 +38,8 @@ description: "将包含 LaTeX 数学公式的 Markdown 或 LaTeX 论文通过 Pa
    `--resource-path` 和 `--reference-doc` 都是可选参数。只有用户明确允许覆盖已有文件时才传 `--force`。不要增加 `--mathml`；Pandoc 的 DOCX writer 负责输出 OMML。
 
 4. 检查脚本结果。
-   - 主脚本在发布最终文件前自动检查 DOCX ZIP 完整性、OOXML 可解析性、OMML 数量、MathML 残留、原始 TeX 定界符残留和源公式数量。
+   - 主脚本在发布最终文件前自动检查 DOCX ZIP 完整性、OOXML 可解析性、OMML 数量、MathML 残留、原始 TeX 定界符残留、源公式数量、图片节点数量、图片关系和媒体文件数量。
+   - 源文件含图片时，图片引用次数和唯一图片数量必须在 DOCX 中得到满足；Pandoc 的图片资源警告即使返回码为 0 也视为失败。
    - 验证失败时不得交付临时 DOCX；返回 Pandoc 诊断或结构化验证错误。
    - 如需独立复查已有文件，运行：
 
@@ -43,6 +47,8 @@ description: "将包含 LaTeX 数学公式的 Markdown 或 LaTeX 论文通过 Pa
      python "<SKILL_DIR>/scripts/verify_omml.py" \
        "<OUTPUT.docx>" --source "<INPUT.md>" --report "<REPORT.json>"
      ```
+
+   - 报告中的 `expected_source_images`、`image_occurrences`、`media_files` 和 `image_relationships` 用于复查图片是否真正写入 Word 包。
 
 5. 完成视觉检查。
    - 使用当前 harness 可用的 Word、LibreOffice 或 DOCX 渲染工具检查分页、公式换行、表格、图片、中文字体和模板样式。

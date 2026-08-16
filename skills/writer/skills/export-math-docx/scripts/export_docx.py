@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -13,17 +14,37 @@ import tempfile
 import zipfile
 from dataclasses import asdict, dataclass
 from pathlib import Path
+from urllib.parse import unquote, urlsplit
+from urllib.request import url2pathname
 
 from verify_omml import inspect_docx
 
 INPUT_FORMATS = {
-    ".md": "markdown+tex_math_dollars",
-    ".markdown": "markdown+tex_math_dollars",
-    ".mdown": "markdown+tex_math_dollars",
-    ".mkd": "markdown+tex_math_dollars",
+    ".md": (
+        "markdown+tex_math_dollars+tex_math_single_backslash"
+        "+tex_math_double_backslash"
+    ),
+    ".markdown": (
+        "markdown+tex_math_dollars+tex_math_single_backslash"
+        "+tex_math_double_backslash"
+    ),
+    ".mdown": (
+        "markdown+tex_math_dollars+tex_math_single_backslash"
+        "+tex_math_double_backslash"
+    ),
+    ".mkd": (
+        "markdown+tex_math_dollars+tex_math_single_backslash"
+        "+tex_math_double_backslash"
+    ),
     ".tex": "latex",
     ".latex": "latex",
 }
+EXTERNAL_IMAGE_SCHEMES = {"data", "ftp", "http", "https"}
+IMAGE_WARNING_RE = re.compile(
+    r"could not (?:fetch|find|load) (?:image|resource)|"
+    r"(?:image|resource).*(?:not found|failed to (?:fetch|load))",
+    re.IGNORECASE,
+)
 
 
 class ExportError(RuntimeError):
@@ -37,6 +58,18 @@ class PandocRuntime:
     executable: str
     source: str
     version: str
+
+
+@dataclass(frozen=True)
+class ImageManifest:
+    """Resolved image references discovered through Pandoc's source AST."""
+
+    total: int
+    unique: int
+    local: int
+    external: int
+    targets: tuple[str, ...]
+    resolved_local_files: tuple[str, ...]
 
 
 def _run(executable: str, arguments: list[str]) -> subprocess.CompletedProcess[str]:
@@ -136,11 +169,11 @@ def _validate_reference_doc(reference: Path) -> Path:
     return resolved
 
 
-def _resource_path_value(source: Path, requested: list[Path]) -> str:
-    """Build Pandoc's platform-specific resource search path."""
+def _resource_directories(source: Path, requested: list[Path]) -> list[Path]:
+    """Resolve and deduplicate Pandoc resource search directories."""
     directories = [source.parent]
     directories.extend(path.expanduser().resolve() for path in requested)
-    unique: list[str] = []
+    unique: list[Path] = []
     seen: set[str] = set()
     for directory in directories:
         resolved = directory.resolve()
@@ -149,8 +182,134 @@ def _resource_path_value(source: Path, requested: list[Path]) -> str:
         key = os.path.normcase(str(resolved))
         if key not in seen:
             seen.add(key)
-            unique.append(str(resolved))
-    return os.pathsep.join(unique)
+            unique.append(resolved)
+    return unique
+
+
+def _resource_path_value(directories: list[Path]) -> str:
+    """Build Pandoc's platform-specific resource search path value."""
+    return os.pathsep.join(str(directory) for directory in directories)
+
+
+def _pandoc_image_targets(document: object) -> list[str]:
+    """Return image targets from a Pandoc JSON AST."""
+    targets: list[str] = []
+
+    def visit(node: object) -> None:
+        if isinstance(node, dict):
+            if node.get("t") == "Image":
+                content = node.get("c")
+                if (
+                    isinstance(content, list)
+                    and content
+                    and isinstance(content[-1], list)
+                    and content[-1]
+                    and isinstance(content[-1][0], str)
+                ):
+                    targets.append(content[-1][0])
+            for value in node.values():
+                visit(value)
+        elif isinstance(node, list):
+            for value in node:
+                visit(value)
+
+    visit(document)
+    return targets
+
+
+def _local_image_path(target: str) -> Path | None:
+    """Convert a local Pandoc image target to a filesystem path."""
+    if target.startswith("//"):
+        return None
+    if re.match(r"^[A-Za-z]:[\\/]", target):
+        return Path(unquote(target))
+
+    parsed = urlsplit(target)
+    if parsed.scheme.casefold() in EXTERNAL_IMAGE_SCHEMES:
+        return None
+    if parsed.scheme.casefold() == "file":
+        return Path(url2pathname(unquote(parsed.path)))
+    if parsed.scheme:
+        return None
+    return Path(unquote(parsed.path))
+
+
+def _resolve_local_image(target: str, directories: list[Path]) -> Path | None:
+    """Resolve a local image target using Pandoc's resource search order."""
+    candidate = _local_image_path(target)
+    if candidate is None:
+        return None
+    if candidate.is_absolute():
+        return candidate.resolve() if candidate.is_file() else None
+    for directory in directories:
+        resolved = (directory / candidate).resolve()
+        if resolved.is_file():
+            return resolved
+    return None
+
+
+def _inspect_source_images(
+    runtime: PandocRuntime,
+    source: Path,
+    input_format: str,
+    resource_directories: list[Path],
+) -> ImageManifest:
+    """Parse source images through Pandoc and fail when local files are missing."""
+    resource_path = _resource_path_value(resource_directories)
+    result = _run(
+        runtime.executable,
+        [
+            f"--from={input_format}",
+            "--to=json",
+            "--standalone",
+            f"--resource-path={resource_path}",
+            str(source),
+        ],
+    )
+    if result.returncode != 0:
+        diagnostic = (result.stderr or result.stdout or "Pandoc 未返回诊断").strip()
+        raise ExportError(f"Pandoc 无法解析源文件（exit {result.returncode}）:\n{diagnostic}")
+    try:
+        document = json.loads(result.stdout)
+    except json.JSONDecodeError as exc:
+        raise ExportError(f"Pandoc 没有返回有效的文档结构: {exc}") from exc
+
+    targets = _pandoc_image_targets(document)
+    missing: list[str] = []
+    resolved_files: list[Path] = []
+    unique_keys: list[str] = []
+    external = 0
+    for target in targets:
+        candidate = _local_image_path(target)
+        if candidate is None:
+            external += 1
+            unique_keys.append(f"external:{target}")
+            continue
+        resolved = _resolve_local_image(target, resource_directories)
+        if resolved is None:
+            missing.append(target)
+            continue
+        resolved_files.append(resolved)
+        unique_keys.append(f"local:{os.path.normcase(str(resolved))}")
+
+    if missing:
+        searched = ", ".join(str(path) for path in resource_directories)
+        missing_list = "\n".join(f"- {target}" for target in dict.fromkeys(missing))
+        raise ExportError(
+            "源文件引用的图片不存在，已停止导出以避免生成无图 DOCX:\n"
+            f"{missing_list}\n资源搜索目录: {searched}\n"
+            "请补齐图片、修正源文件路径，或使用 --resource-path 添加图片目录。"
+        )
+
+    unique_files = tuple(dict.fromkeys(str(path) for path in resolved_files))
+    return ImageManifest(
+        total=len(targets),
+        unique=len(dict.fromkeys(unique_keys)),
+        local=len(targets) - external,
+        external=external,
+        targets=tuple(targets),
+        resolved_local_files=unique_files,
+    )
 
 
 def _publish_atomically(temporary_docx: Path, output: Path, force: bool) -> None:
@@ -196,7 +355,14 @@ def export_docx(args: argparse.Namespace) -> dict[str, object]:
     reference = (
         _validate_reference_doc(args.reference_doc) if args.reference_doc else None
     )
-    resource_path = _resource_path_value(source, args.resource_path)
+    resource_directories = _resource_directories(source, args.resource_path)
+    resource_path = _resource_path_value(resource_directories)
+    image_manifest = _inspect_source_images(
+        runtime,
+        source,
+        input_format,
+        resource_directories,
+    )
 
     with tempfile.TemporaryDirectory(prefix="export-math-docx-") as temporary_directory:
         temporary_docx = Path(temporary_directory) / "pandoc-output.docx"
@@ -216,10 +382,19 @@ def export_docx(args: argparse.Namespace) -> dict[str, object]:
             raise ExportError(
                 f"Pandoc 转换失败（exit {result.returncode}）:\n{diagnostic}"
             )
+        if result.stderr and IMAGE_WARNING_RE.search(result.stderr):
+            raise ExportError(
+                "Pandoc 报告图片资源错误，已停止导出:\n" + result.stderr.strip()
+            )
         if not temporary_docx.is_file() or temporary_docx.stat().st_size == 0:
             raise ExportError("Pandoc 没有生成非空 DOCX")
 
-        verification = inspect_docx(temporary_docx, source=source)
+        verification = inspect_docx(
+            temporary_docx,
+            source=source,
+            expected_images=image_manifest.total,
+            expected_unique_images=image_manifest.unique,
+        )
         if not verification.valid:
             raise ExportError(
                 "DOCX 未通过 OMML 验证:\n"
@@ -233,6 +408,7 @@ def export_docx(args: argparse.Namespace) -> dict[str, object]:
         "input": str(source),
         "input_format": input_format,
         "pandoc": asdict(runtime),
+        "images": asdict(image_manifest),
         "verification": {**asdict(verification), "docx": str(output)},
     }
     if report_path:
