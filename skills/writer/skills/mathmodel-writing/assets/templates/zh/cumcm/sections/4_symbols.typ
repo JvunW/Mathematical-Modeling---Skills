@@ -7,7 +7,8 @@
 )[表 1 #h(1em) 主要符号说明]]
 #align(center)[
   #table(
-    columns: (4.2em, 8em, 4.2em),
+    width: 74%,
+    columns: (4.2em, 1fr, 5.2em),
     align: center,
     stroke: none,
     inset: (x: 0.75em, y: 0.6em),

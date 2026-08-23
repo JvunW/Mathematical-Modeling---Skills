@@ -66,6 +66,7 @@
 % ---------- 表格与代码 ----------
 \usepackage{booktabs}
 \usepackage{array}
+\usepackage{tabularx}
 \usepackage{xcolor}
 \usepackage{listings}
 \lstset{
@@ -79,6 +80,13 @@
   showstringspaces=false,
   columns=fullflexible,
   keepspaces=true,
+}
+
+% ---------- 表格排版：结果表使用版心约束，避免自然宽度过窄 ----------
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\newcommand{\resulttablestart}{%
+  \renewcommand{\arraystretch}{1.2}%
+  \setlength{\tabcolsep}{6pt}%
 }
 
 % ---------- 页码：底部居中 ----------

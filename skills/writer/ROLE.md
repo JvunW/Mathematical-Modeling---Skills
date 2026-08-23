@@ -20,15 +20,16 @@
    - 选择 LaTeX 时，需要 XeLaTeX 或兼容 TeX 发行版；
    - 需要 Word 时，优先准备含 `$...$` / `$$...$$` 公式的 Markdown，再用 `$export-math-docx` 通过 Pandoc 输出 Word 原生 OMML；这条链路不需要 Typst 或 XeLaTeX；
    - 只生成源文件时可以暂不安装编译器，但必须如实说明尚未编译验证。
-4. 使用 OpenAlex 时，将免费密钥配置为 `OPENALEX_API_KEY` 环境变量；不得把密钥写入命令行、Skill、论文、日志或版本库。
-5. 若关键结果、图表或模型定义缺失，先返回对应角色补齐，不能用写作掩盖证据缺口。
+4. 在撰写正文前创建 `reports/PAPER_CONTENT_PLAN.md`，逐问记录论点、公式、结果表/图、验证证据和局限，并把每项绑定到真实结果文件。
+5. 使用 OpenAlex 时，将免费密钥配置为 `OPENALEX_API_KEY` 环境变量；未配置时使用 Deep Research 做文献发现，再用 Crossref、Semantic Scholar、arXiv、PubMed 或 DOI/出版社页面核验；不得把密钥写入命令行、Skill、论文、日志或版本库。
+6. 若关键结果、图表或模型定义缺失，先记录 `EVIDENCE_GAP` 并返回对应角色补齐，不能用写作掩盖证据缺口。
 
 ## 如何选择 Skills
 
 | 任务 | 使用的 Skill | 你要完成的工作 |
 | --- | --- | --- |
 | 数学建模论文撰写 | `$mathmodel-writing` | 选择模板、组织章节、插入真实结果和文献 |
-| 学术文献检索 | `$paper-lookup` | 查询 OpenAlex 等数据库并保存检索来源 |
+| 学术文献检索 | `$paper-lookup` | 使用 Deep Research 和结构化数据库发现、整理并保存检索来源 |
 | 系统性文献综述 | `$literature-review` | 设计检索、筛选、证据综合和综述结构 |
 | 引用真实性检查 | `$citation-verification` | 核验 DOI、题名、作者、年份及论点匹配度 |
 | Typst 排版与公式 | `$typst-author` | 创建、修改、编译和排错 `.typ` 文件 |
@@ -47,22 +48,22 @@
 6. 编译 PDF 或渲染 DOCX。可以渲染页面时，应逐页检查裁切、重叠、缺字、空白页、公式换行和图表可读性。
 7. 调用 `$mathmodel-verification` 完成最终验收，生成 `reports/VERIFY_REPORT.md`；Word 交付还应保留 `$export-math-docx` 的 JSON 验证报告。
 
-## OpenAlex 与引用要求
+## 文献检索与引用要求
 
-- 论文需要引用方法、背景、参数或相关研究时，至少执行一次 OpenAlex 检索；
-- 保存原始检索结果到 `reports/openalex_results.json`；
-- 创建 `reports/LITERATURE_REPORT.md`，记录检索式、采用或舍弃的文献及对应论点；
-- 每条正文引用都必须映射到已核验记录；
-- OpenAlex 不可用时，可以降级到 Crossref、PubMed、出版社页面或其他权威来源，但必须记录来源；
+- 论文需要引用方法、背景、参数或相关研究时，必须执行可追溯的文献检索；OpenAlex 是可选来源，不再强制调用；
+- OpenAlex 已配置时，可保存原始结果到 `reports/openalex_results.json`；未配置时不发送匿名请求；
+- OpenAlex 未配置或不可用时，使用 Deep Research 发现候选文献，并记录研究问题、限制条件、日期和来源范围；
+- 每条正文引用都必须映射到 `reports/LITERATURE_REPORT.md` 中已独立核验的记录；Deep Research 报告本身不得作为学术参考文献；
 - API 没有返回的作者、卷期、页码或 DOI 不得推测补齐。
 
 ## 必须形成的交付物
 
 根据任务需求，至少应提供：
 
-- `reports/openalex_results.json`：OpenAlex 原始结果或明确的失败记录；
+- `reports/openalex_results.json`：使用 OpenAlex 时保存的原始结果；未使用时可省略；
 - `reports/LITERATURE_REPORT.md`：文献筛选、核验和论点映射；
 - `paper/`：完整 Typst 或 LaTeX 论文源文件和参考文献文件；
+- `reports/PAPER_CONTENT_PLAN.md`：逐问论点、证据和章节映射；
 - 编译成功的最终 PDF，或无法编译时的明确原因；
 - 比赛要求 Word 时，提供包含原生 OMML 公式的最终 DOCX 和结构验证报告；
 - `reports/VERIFY_REPORT.md`：最终检查结论、修复项和未通过项。
@@ -81,7 +82,7 @@
 ## 推荐调用示例
 
 ```text
-请使用 $mathmodel-writing，根据分析报告、结果报告和 figures 中的图表撰写 Typst 论文，并通过 OpenAlex 检索和核验参考文献。
+请使用 $mathmodel-writing，根据分析报告、结果报告和 figures 中的图表撰写 Typst 论文；如果未配置 OpenAlex，请使用 Deep Research 发现候选文献，再通过 Crossref、Semantic Scholar 或 DOI 页面核验参考文献。
 ```
 
 ```text
