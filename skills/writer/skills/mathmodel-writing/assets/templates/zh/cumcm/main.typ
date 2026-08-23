@@ -94,7 +94,7 @@
 #include(file)
 ]
 
-#let three-line-table(caption, columns, header, body, inset: (x: 0.35em, y: 0.52em), cell-align: center) = {
+#let three-line-table(caption, columns, header, body, inset: (x: 0.35em, y: 0.52em), cell-align: center, table-width: 86%) = {
   let col-count = header.len()
   let body-rows = calc.floor(body.len() / col-count)
   let bottom-y = body-rows + 1
@@ -106,6 +106,7 @@
         #align(center)[#text(font: hei-font, size: 10.5pt, weight: "bold")[#caption]]
         #v(0.6em)
         #table(
+          width: table-width,
           columns: columns,
           align: cell-align,
           stroke: none,
