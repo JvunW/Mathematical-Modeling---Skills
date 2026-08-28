@@ -1,0 +1,8 @@
+{
+  "release": "2.0.0",
+  "status": "not_run",
+  "claim_9_5": false,
+  "required_cases": 8,
+  "required_repetitions_per_case": 3,
+  "note": "Populate with independent holdout results before claiming an empirical score."
+}

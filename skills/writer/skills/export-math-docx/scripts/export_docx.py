@@ -17,6 +17,7 @@ from pathlib import Path
 from urllib.parse import unquote, urlsplit
 from urllib.request import url2pathname
 
+from number_equations import EquationNumberingError, number_docx_equations
 from verify_omml import inspect_docx
 
 INPUT_FORMATS = {
@@ -389,6 +390,11 @@ def export_docx(args: argparse.Namespace) -> dict[str, object]:
         if not temporary_docx.is_file() or temporary_docx.stat().st_size == 0:
             raise ExportError("Pandoc 没有生成非空 DOCX")
 
+        try:
+            inserted_equation_numbers = number_docx_equations(temporary_docx)
+        except EquationNumberingError as exc:
+            raise ExportError(f"DOCX 公式编号失败: {exc}") from exc
+
         verification = inspect_docx(
             temporary_docx,
             source=source,
@@ -409,6 +415,11 @@ def export_docx(args: argparse.Namespace) -> dict[str, object]:
         "input_format": input_format,
         "pandoc": asdict(runtime),
         "images": asdict(image_manifest),
+        "equation_numbering": {
+            "inserted": inserted_equation_numbers,
+            "fields": verification.equation_number_fields,
+            "values": verification.equation_number_values,
+        },
         "verification": {**asdict(verification), "docx": str(output)},
     }
     if report_path:

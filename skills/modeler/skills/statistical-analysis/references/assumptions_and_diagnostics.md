@@ -267,8 +267,8 @@ vif_data = pd.DataFrame()
 vif_data["feature"] = X.columns
 vif_data["VIF"] = [variance_inflation_factor(X.values, i) for i in range(len(X.columns))]
 
-# VIF > 10 indicates severe multicollinearity
-# VIF > 5 indicates moderate multicollinearity
+# Higher VIF values are diagnostic signals, not automatic variable-deletion rules.
+# Interpret them with theory, sample size, coefficient stability, and validation performance.
 ```
 
 **What to do if violated**:

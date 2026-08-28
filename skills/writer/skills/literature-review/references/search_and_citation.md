@@ -75,24 +75,14 @@ Use appropriate skills:
 Expand search via citation networks:
 
 1. **Forward citations** (papers citing key papers):
-   - Use `parallel-cli search` to find papers citing a specific work:
-     ```bash
-     parallel-cli search "papers citing [Author et al. Year] [paper title]" \
-       -q "citing" -q "[key author]" \
-       --json --max-results 10 --excerpt-max-chars-total 27000 \
-       --include-domains "scholar.google.com,semanticscholar.org,arxiv.org,pubmed.ncbi.nlm.nih.gov" \
-       -o sources/litreview_forward_citations.json
-     ```
-   - Use Google Scholar "Cited by"
-   - Use Semantic Scholar or OpenAlex APIs
-   - Identifies newer research building on seminal work
+   - Use `$paper-lookup` with Semantic Scholar or OpenAlex citation endpoints.
+   - When available, use the current harness's web search to inspect an official "cited by" page.
+   - Save the query, endpoint, date, limits, and raw result path.
+   - This identifies newer research building on seminal work.
 
 2. **Backward citations** (references from key papers):
-   - Use `parallel-cli extract` to fetch full text of key papers and extract their reference lists:
-     ```bash
-     parallel-cli extract "https://doi.org/10.xxxx/yyyy" --json
-     ```
-   - Extract references from included papers
+   - Retrieve permissible full text or structured references from the publisher, PMC, arXiv, Crossref, or another primary scholarly source.
+   - Extract references from included papers.
    - Identify highly cited foundational work
    - Find papers cited by multiple included studies
 

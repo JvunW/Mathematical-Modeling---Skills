@@ -30,6 +30,7 @@
 #set par(first-line-indent: (amount: 2em, all: true), justify: true, leading: 0.82em, spacing: 0.35em)
 #set heading(numbering: cn-numbering)
 #set enum(numbering: "1.")
+#set math.equation(numbering: "(1)")
 #set table(inset: (x: 0.75em, y: 0.35em), stroke: 0.6pt)
 
 #show heading.where(level: 1): set align(center)

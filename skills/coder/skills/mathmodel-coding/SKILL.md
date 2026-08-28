@@ -7,6 +7,8 @@ description: "实现并验证数学模型，生成可复现代码、数值结果
 
 本 skill 通常承接 `$mathmodel-analysis`。把用户指定的建模报告作为输入；未指定时，默认读取当前任务目录中的 `reports/ANALYSIS_MODELING_REPORT.md`。目标是把模型和算法落实为可复现程序，跑出可信结果，并生成论文所需的数据型图表。
 
+若存在 `reports/model_manifest.json`，把它作为变量、目标、约束和计划指标的机器可读输入；发现与 Markdown 建模报告冲突时停止冻结结果并记录差异，不静默选择其中一个版本。
+
 ## 数学建模规范参考
 
 如需额外的数学建模领域规范，并且 `$mathmodel-references` 已随建模手插件安装，可调用它查询“题型防错速查”“代码实现与结果”“编码阶段常见错误”和“图表与可视化”。未安装建模手插件时不得因此阻塞编码，应依据当前模型报告、用户要求和通用工程规范继续执行。
@@ -36,7 +38,11 @@ description: "实现并验证数学模型，生成可复现代码、数值结果
 5. 绘制丰富的图表。
 6. 在 `reports/RESULTS_REPORT.md` 中写清楚方法、关键数值和校验结果。
 
+同时生成 `results/results_manifest.json`，遵循仓库 `schemas/results_manifest.schema.json`，记录 run ID、代码/数据/环境指纹、参数、随机性策略、指标、图表、表格和检查结果。关键数字不得只存在于日志或论文正文。
+
 优化类问题必须先保证可行解，再优化目标值。预测类问题必须做训练/验证划分或合理误差评估。评价类问题必须说明指标方向、归一化方法和权重来源。
+
+结果完成后使用 `$mathmodel-workflow` 的 Runtime 注册必需结果。只有内容 hash 未变化、code/data/config/environment 指纹齐全且随机性策略已记录的结果才能冻结；冻结不等于验证正确，仍须通过后续论文和交付 Gate。
 
 ### Step 3: 结果文件格式
 

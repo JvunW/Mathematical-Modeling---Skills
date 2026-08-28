@@ -1,0 +1,119 @@
+% =============================================================================
+% AI 工具使用详情正文模板
+% 灰色【】内为填写提示，提交前请逐项替换为真实内容。
+% =============================================================================
+
+\section{AI 工具使用概述}
+
+\placeholder{按“使用了什么—用于哪里—人工完成什么—怎样核验”的顺序写 1--2 段；说明 AI 仅在所列范围内提供辅助，核心建模决策、实验设计、结果判断和最终结论由参赛队独立完成。}
+
+\par
+\placeholder{如比赛规则要求在论文参考文献之前放置简短声明，可在此给出与主论文完全一致的声明文本。}
+
+\section{AI 工具基本信息}
+
+\tabletitle{表 1\quad AI 工具基本信息}
+\begin{center}
+  \renewcommand{\arraystretch}{1.26}
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabularx}{0.96\textwidth}{@{}C{0.085\textwidth}C{0.17\textwidth}C{0.18\textwidth}C{0.18\textwidth}Y@{}}
+    \toprule
+    序号 & 工具名称 & 版本或型号 & 服务提供方 & 主要用途 \\
+    \midrule
+    \AItoolrow{1}{\placeholder{工具名称}}{\placeholder{版本或型号}}{\placeholder{提供方}}{\placeholder{代码调试、方案检查、语言润色等}}
+    \AItoolrow{2}{\placeholder{如无第二项请删除本行}}{\placeholder{版本或型号}}{\placeholder{提供方}}{\placeholder{主要用途}}
+    \bottomrule
+  \end{tabularx}
+\end{center}
+
+\section{具体使用目的与环节}
+
+\subsection{使用目的}
+
+\placeholder{逐项说明触发 AI 使用的实际问题、希望获得的输出类型和使用边界；每项尽量对应一个交互记录编号。}
+
+\subsection{使用环节}
+
+\placeholder{按照竞赛流程说明 AI 出现在哪个环节、输入材料是什么、输出影响了哪一份论文内容或代码结果。}
+
+\subsection{未使用 AI 的核心环节}
+
+\placeholder{如实列出由参赛队独立完成的核心决策及其人工依据；若某环节使用过 AI，应移至前两小节披露，不得放在本节。}
+
+\section{主要提示方式与使用过程}
+
+\subsection{提示方式}
+
+\placeholder{归纳实际采用的提示结构、提供给 AI 的材料、约束条件和追问方式，并引用对应交互记录编号。}
+
+\subsection{使用过程}
+
+\placeholder{按时间或任务顺序说明“输入—输出—人工判断—后续动作”，并与第七节 R1、R2 等记录互相引用。}
+
+\subsection{输出处理原则}
+
+\placeholder{分别说明代码、公式推导、事实资料、数值结果和语言润色的人工处理与核验原则，以及无法核验时的处置。}
+
+\section{AI 输出的采纳、人工修改与核验}
+
+\tabletitle{表 2\quad AI 输出处理与核验记录}
+\begin{center}
+  \zihao{-5}
+  \renewcommand{\arraystretch}{1.24}
+  \setlength{\tabcolsep}{2.5pt}
+  \begin{tabularx}{\textwidth}{@{}C{0.055\textwidth}P{0.16\textwidth}C{0.105\textwidth}P{0.18\textwidth}P{0.20\textwidth}Y@{}}
+    \toprule
+    编号 & AI 输出内容摘要 & 采纳情况 & 人工修改 & 核验方法 & 对应位置 \\
+    \midrule
+    \adoptionrow{R1}{\placeholder{输出摘要}}{\placeholder{未采纳/部分采纳/采纳并修改}}{\placeholder{说明具体修改，不写笼统“已修改”}}{\placeholder{复算、对照、程序测试、原始数据核验等}}{\placeholder{论文节号或代码行号}}
+    \adoptionrow{R2}{\placeholder{输出摘要}}{\placeholder{采纳情况}}{\placeholder{人工修改}}{\placeholder{核验方法}}{\placeholder{对应位置}}
+    \bottomrule
+  \end{tabularx}
+\end{center}
+
+\noindent\placeholder{表中每项被采纳的 AI 输出均应完成必要的人工修改和核验；不要新增无法证实的数据、结论、文献或事实表述。}
+
+\section{人工主导与责任说明}
+
+\placeholder{基于真实过程说明参赛队主导的具体决策、AI 辅助边界、审查核验状态和最终责任；不要只写泛化承诺。}
+
+\clearpage
+\section{典型交互示例}
+
+\begin{interactionrecord}{R1}{\placeholder{填写本次交互主题}}
+  \item \textbf{基本信息}
+
+  \placeholder{填写日期或竞赛阶段、工具名称、界面显示的版本或型号、交互目的，以及该记录关联的论文或代码成果。}
+
+  \item \textbf{主要提示词}
+
+  \placeholder{尽量原样填写关键提示词；如节选须注明，并保留输入材料、约束条件和期望输出。}
+
+  \item \textbf{AI 回复摘要}
+
+  \placeholder{仅概括 AI 实际给出的相关建议、代码、解释或措辞，不要把参赛队后续判断写成 AI 原始回复。}
+
+  \item \textbf{人工处理与核验}
+
+  \placeholder{依次填写采纳程度、具体人工修改、可复现核验步骤、核验结果及对应论文节号或代码位置。}
+\end{interactionrecord}
+
+\begin{interactionrecord}{R2}{\placeholder{填写第二次典型交互主题}}
+  \item \textbf{基本信息}
+
+  \placeholder{填写日期或竞赛阶段、工具名称、版本或型号、交互目的及关联成果。}
+
+  \item \textbf{主要提示词}
+
+  \placeholder{填写关键提示词。}
+
+  \item \textbf{AI 回复摘要}
+
+  \placeholder{填写 AI 实际回复的摘要。}
+
+  \item \textbf{人工处理与核验}
+
+  \placeholder{填写采纳、修改、核验与对应位置。}
+\end{interactionrecord}
+
+% 如有更多典型交互，请复制完整的 interactionrecord 环境并将编号改为 R3、R4……

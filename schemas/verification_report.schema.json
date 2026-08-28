@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mathmodelagent.local/schemas/verification_report.schema.json",
+  "title": "Mathematical Modeling Verification Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "status", "checks", "unresolved", "verified_at"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "status": {"enum": ["pass", "fail", "blocked"]},
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "status", "evidence"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "name": {"type": "string", "minLength": 1},
+          "status": {"enum": ["pass", "fail", "warning", "skipped"]},
+          "evidence": {"type": "string"}
+        }
+      }
+    },
+    "unresolved": {"type": "array", "items": {"type": "string"}},
+    "toolchain": {"type": "object"},
+    "verified_at": {"type": "string", "format": "date-time"}
+  }
+}

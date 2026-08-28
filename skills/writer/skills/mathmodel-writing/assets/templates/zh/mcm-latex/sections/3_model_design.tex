@@ -2,15 +2,17 @@
 
 \subsection{Prediction Model}
 
-\[
-  \hat{y} = f(\mathbf{x}; \theta) = \sum_{i=1}^{n} \theta_i \phi_i(\mathbf{x})
-\]
+\begin{equation}
+\hat{y} = f(\mathbf{x}; \theta) = \sum_{i=1}^{n} \theta_i \phi_i(\mathbf{x})
+  \label{eq:3-model-design-1}
+\end{equation}
 
 \subsection{Optimization Objective}
 
-\[
-  \mathcal{L}(\theta) = \frac{1}{N} \sum_{i=1}^{N} (y_i - \hat{y}_i)^2 + \lambda R(\theta)
-\]
+\begin{equation}
+\mathcal{L}(\theta) = \frac{1}{N} \sum_{i=1}^{N} (y_i - \hat{y}_i)^2 + \lambda R(\theta)
+  \label{eq:3-model-design-2}
+\end{equation}
 
 \subsection{Ensemble Strategy}
 

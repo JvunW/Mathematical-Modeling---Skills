@@ -71,6 +71,7 @@
 #set text(font: ("Times New Roman", "Times", "Songti SC", "STSong", "New Computer Modern"), size: 12pt, lang: "zh")
 #set par(first-line-indent: (amount: 2em, all: true), justify: true, leading: 0.58em)
 #set enum(numbering: "1.")
+#set math.equation(numbering: "(1)")
 #set figure(supplement: [Figure])
 #set table(stroke: 0.5pt, inset: (x: 5pt, y: 3pt))
 #set heading(numbering: apmcm-heading-numbering)

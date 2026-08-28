@@ -1,127 +1,129 @@
 ---
 name: mathmodel-workflow
-description: "启动并协调完整数学建模任务。用于从赛题和附件开始，确认偏好、建立可移植工作区，并按分析、编码、图示、论文和验收阶段推进。"
+description: "启动并协调完整数学建模任务。用于从赛题和附件开始，确认交付路线、建立可恢复工作区，并按分析、编码、图示、论文和验收阶段推进。"
 ---
 
-# 数学建模工作流
+# 数学建模完整工作流
 
-本 skill 是数学建模任务的总控入口。它不替代后续阶段 skill，而是负责启动流程、确认偏好、记录决策、生成计划，并按顺序调用各阶段 skill。
+本 Skill 是流程协调入口，不替代各阶段的专业 Skill。它负责确认用户偏好、创建可移植工作区、维护阶段状态、调用下游 Skill，并阻止无证据的阶段跳转。
 
-## 数学建模规范参考
+## 使用边界
 
-如需领域判断，读取 `../mathmodel-references/references/math-modeling-norms.md`。该文件只提供数学建模基本规范和防错知识，不改变本 skill 的阶段顺序和产出约定。
+- 用户只需要分析、写作或验收等单一阶段时，直接使用对应 Skill。
+- 完整赛题、多阶段任务、需要中断恢复或多种交付格式时使用本 Skill。
+- 所有状态和产物只写入用户指定的 `<WORK_ROOT>`；未指定时使用当前工作目录。
+- Gate 是质量检查，不扩大任务范围。非安全性阻断允许用户显式豁免，但必须记录原因和影响。
 
-## 必须产出
+## 开始前确认
 
-把用户明确指定的任务目录作为 `<WORK_ROOT>`；若用户未指定，则使用当前工作目录。只在 `<WORK_ROOT>` 中创建或更新以下文件：
+只询问会实质改变工作流的问题：
 
-- `plan.md`：整体流程方案、建模方向、阶段顺序、预期产物和风险控制。
-- `todo.md`：具体待办事项列表，记录每个阶段的任务和状态。
+1. 最终交付路线：**Typst/PDF、LaTeX/PDF，还是 Word/DOCX**？
+2. 比赛或模板类型；若为 Word/DOCX，是否提供官方 `.docx` 模板？
+3. 论文语言。
+4. 子问题数量是否已知。
+5. 是否允许联网检索文献；若不允许，只使用用户材料并标记外部核验缺口。
 
-## 工作流
+Word/DOCX 路线使用 Markdown 作为论文源文件，由 `$export-math-docx` 导出 Word 原生 OMML 公式；不得从 Typst 直接转换为 DOCX。
 
-### 1. 确认用户偏好
+## 初始化工作区
 
-在规划前，只询问会实质影响流程的问题。问题要少而关键。
-
-优先询问（按重要性排序）：
-
-1. **排版引擎**：Typst 还是 LaTeX？— 决定 `mathmodel-writing` 使用哪套模板和编译命令。Typst 使用 `typst` 命令编译；LaTeX 使用 `xelatex` 命令编译（需跑两遍解决交叉引用）。
-2. **竞赛类型**：国赛/华为杯/华中杯/MCM/...— 决定模板选择，见 `mathmodel-writing` 的模板族清单。
-3. **论文语言**：中文/英文 — MCM/ICM/COMAP 强制英文，其他默认中文。
-4. **子问题数量是否已知**：影响章节文件生成数量。若未知，由 `mathmodel-analysis` 阶段根据题面确定。
-
-将用户的选择记录到 `plan.md` 的"方案"小节中。
-
-
-### 2. 制定方案
-
-按以下结构编写 `plan.md`：
-
-```markdown
-# 方案
-
-要依次调用这些 skill，按照里面要求完成任务。
-
-用户偏好：
-- 排版引擎：<Typst / LaTeX>
-- 竞赛类型：<国赛 / 华为杯 / MCM / ...>
-- 论文语言：<中文 / 英文>
-- 子问题数量：<已知 N 个 / 待分析确定>
-
-workflow:
-   step      skills
-1. 赛题分析与建模设计 - `$mathmodel-analysis`
-2. 编程实现和图表生成 - `$mathmodel-coding`
-3. 流程与架构图绘制 - `$mathmodel-drawio`
-4. 竞赛论文撰写 - `$mathmodel-writing`
-5. 验证和验收 - `$mathmodel-verification`
-```
-
-## 项目目录结构
-
-各阶段按此骨架创建和填充文件：
+创建或更新：
 
 ```text
 .
-├── plan.md                      # 1: 本文件
-├── todo.md                      # 1: 待办事项
-├── reports/                     # 各阶段文档报告
-│   ├── ANALYSIS_MODELING_REPORT.md  # 1: 赛题分析-建模报告
-│   ├── RESULTS_REPORT.md            # 2: 结果报告
-│   ├── DRAWIO_REPORT.md             # 3: 非数据图说明
-│   ├── VERIFY_REPORT.md             # 5: 验收报告
-├── code/                        # 2: 代码
-│   ├── problem1.py
-│   ├── problem2.py
-│   ├── problem3.py               # 问题的数量应该更具题目动态调整
-│   ├── ... 
-│   └── utils.py
-├── results/                     # 2: 结果记录
-├── figures/                     # 2+3: 所有图表
-│   ├── *.pdf                    #     数据图 + 非数据图 PDF
-│   ├── *.drawio                 #     非数据图源文件
-├── paper/                       # 4: 论文
-│   ├── main.typ / main.tex      #     论文主文件（按用户选择的引擎）
-│   └── sections/                #     各节文件（.typ 或 .tex）
+├── plan.md
+├── todo.md
+├── state/
+│   ├── workflow_state.json
+│   ├── artifact_registry.json
+│   ├── gate_history.jsonl
+│   └── stale_report.json
+├── reports/
+│   ├── model_manifest.json
+│   ├── paper_evidence_map.json
+│   └── verification.json
+├── code/
+├── results/
+│   └── results_manifest.json
+├── figures/
+└── paper/
+    ├── main.typ              # Typst/PDF 路线
+    ├── main.tex              # LaTeX/PDF 路线
+    ├── paper.md              # Word/DOCX 路线
+    ├── template.docx         # 可选：官方模板副本
+    └── output/
 ```
 
-方案必须明确每个阶段由哪个下游 skill 负责，以及该阶段应产出什么文件。
+使用 `scripts/runtime/state_manager.py` 初始化状态。运行时契约、状态枚举和豁免规则见 [references/runtime-contract.md](references/runtime-contract.md)。
 
-### 3. 生成待办
-
-将 `todo.md` 写成阶段性 checklist，格式如下：
+## `plan.md` 必需字段
 
 ```markdown
-# 待办事项
+# 数学建模任务计划
 
-- [ ] 1. 赛题分析与建模设计 - `$mathmodel-analysis`
-- [ ] 2. 编程实现和图表生成 - `$mathmodel-coding`
-- [ ] 3. 流程与架构图绘制 - `$mathmodel-drawio`
-- [ ] 4. 竞赛论文撰写 - `$mathmodel-writing`
-- [ ] 5. 验证和验收 - `$mathmodel-verification`
+- 工作区：<绝对路径>
+- 排版与交付路线：<Typst/PDF | LaTeX/PDF | Markdown→Pandoc→DOCX>
+- 官方模板：<无 | 文件路径>
+- 论文语言：<中文 | 英文>
+- 比赛类型：<CUMCM | MCM/ICM | 其他>
+- 公式策略：<Typst 原生 | LaTeX 原生 | Word 原生 OMML>
+- 最终验收：<PDF 视觉验收 | DOCX 结构、OMML 与页面视觉验收>
+- 外部检索：<允许 | 禁止 | 仅指定来源>
 ```
 
-每完成一个阶段，都要更新 `todo.md` 中对应任务的状态。
+## 阶段与 Gate
 
-### 4. 依次执行阶段
+```text
+G0 ENVIRONMENT_READY
+G1 PROBLEM_PARSED
+G2 METHOD_VALIDATED
+G3 IMPLEMENTATION_VERIFIED
+G4 RESULTS_FROZEN
+G5 PAPER_EVIDENCE_COMPLETE
+G6 DELIVERY_VERIFIED
+```
 
-按以下顺序调用下游 skills：
+| Gate | 主责 Skill | 必需证据 |
+|---|---|---|
+| G0 | `$mathmodel-doctor` 或本 Skill | 环境、附件和输出路径可用 |
+| G1 | `$mathmodel-analysis` | `reports/model_manifest.json` |
+| G2 | `$mathmodel-analysis-grill`，按需配合统计/实验/不确定性 Skill | 方法质询已处理或记录豁免 |
+| G3 | `$mathmodel-coding` | 可复现代码、检查结果和运行记录 |
+| G4 | Runtime | `results/results_manifest.json` 中的必需结果已冻结且 fresh |
+| G5 | `$mathmodel-writing` 与 `$mathmodel-writing-grill` | `reports/paper_evidence_map.json` 完整 |
+| G6 | `$mathmodel-verification` | `reports/verification.json` 为 pass |
 
-| 阶段 | Skill | 作用 | 主要产物 |
-| --- | --- | --- | --- |
-| 赛题分析与建模设计 | `$mathmodel-analysis` | 解析题意、识别变量/约束/数据/评价指标，并建立数学模型、目标函数、约束条件和求解策略。 | `reports/ANALYSIS_MODELING_REPORT.md` |
-| 编程实现和图表生成 | `$mathmodel-coding` | 实现可复现代码，运行实验，生成结果表和数据图表。 | `code/`, `results/`, `reports/RESULTS_REPORT.md`, `figures/` |
-| 流程与架构图绘制 | `$mathmodel-drawio` | 在论文确实需要时，绘制方法流程图、架构图和非数据型概念图。 | `figures/*.drawio`, `figures/*.pdf`, `reports/DRAWIO_REPORT.md` |
-| 竞赛论文撰写 | `$mathmodel-writing` | 基于分析、建模、代码结果和图表撰写最终竞赛论文，并按章节直接插入图表。 | `paper/` |
-| 验证和验收 | `$mathmodel-verification` | 检查可复现性、一致性、产物完整性、格式规范和提交就绪状态。 | `reports/VERIFY_REPORT.md` |
+不得仅根据聊天记忆宣称 Gate 已通过。Gate 必须由验证器输出结构化结果，并写入 `gate_history.jsonl`。
 
-## 阶段边界
+## 执行顺序
 
-- `$mathmodel-coding` 负责生成所有依赖计算结果或实验输出的数据图表。
-- `$mathmodel-drawio` 只负责概念图、算法流程图、架构图、路线图等非数据型图示。
-- 不要让 `$mathmodel-drawio` 重复绘制 `$mathmodel-coding` 已经生成的统计图或数据图。
-- `$mathmodel-writing` 负责决定图表在论文中的位置，并按所选引擎写入图表代码：
-  - Typst：`#figure(image("../../figures/xxx.pdf", width: 85%), caption: [...])`
-  - LaTeX：`\begin{figure}[H]\centering\includegraphics[width=0.85\textwidth]{../../figures/xxx.pdf}\caption{...}\label{fig:xxx}\end{figure}`
-- 不要让 `$mathmodel-writing` 编造数值结论。论文中的数值必须来自 `reports/RESULTS_REPORT.md`、结果表或已生成图表的数据。
+1. **分析**：调用 `$mathmodel-analysis`，输出模型清单；复杂方案再调用 `$mathmodel-analysis-grill`。
+2. **编码**：调用 `$mathmodel-coding`，读取模型清单并输出结果清单。
+3. **图示**：仅在关系、步骤或结构确实需要可视化时调用 `$mathmodel-drawio`；数据图由编码阶段生成。
+4. **冻结结果**：记录代码、数据、配置和环境指纹。只有 lifecycle=`frozen` 且 validity=`fresh` 的必需结果才能用于论文。
+5. **写作**：调用 `$mathmodel-writing`，关键数字只引用结果清单，关键结论写入证据映射。
+6. **Word 导出**：仅 Word/DOCX 路线调用 `$export-math-docx`。
+7. **验收**：调用 `$mathmodel-verification`；未通过 G6 不得声称可提交。
+
+每完成一个阶段，同步更新 `todo.md` 和工作流状态。阶段失败时保留诊断证据，不伪造缺失产物。
+
+## 失效传播与恢复
+
+开始任何新阶段或恢复任务前：
+
+1. 读取 `workflow_state.json` 和 Artifact Registry。
+2. 重新计算已注册文件的内容 hash。
+3. 将变化的上游产物及其下游依赖标记为 stale；只改元数据，不删除用户文件。
+4. 从第一个未通过或已失效的 Gate 恢复。
+5. 已验证且依赖仍 fresh 的阶段不重复执行。
+
+必需产物为 stale、blocked 或 missing 时不能通过 G6。可选产物缺失只产生 warning。用户豁免必须记录 actor、时间、原因、范围和剩余风险。
+
+## 完成标准
+
+- 三种交付路线贯穿计划、目录、写作和验收。
+- 关键模型、结果、图表和论文结论具有稳定 Artifact ID、版本、hash 和依赖。
+- 论文数字可以追溯到 frozen/fresh 结果。
+- 新会话可仅根据工作区状态恢复。
+- 最终交付通过对应格式的结构检查和视觉验收。

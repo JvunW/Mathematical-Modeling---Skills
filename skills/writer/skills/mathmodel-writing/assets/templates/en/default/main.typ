@@ -100,6 +100,7 @@
 #set text(font: roman, size: 12pt, lang: "en")
 #set par(first-line-indent: 2em, justify: true, leading: 0.82em, spacing: 0.5em)
 #set enum(numbering: "1.", spacing: 0.9em)
+#set math.equation(numbering: "(1)")
 #set heading(numbering: "1.1")
 #set table(inset: (x: 0.7em, y: 0.26em))
 

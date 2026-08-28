@@ -1,0 +1,139 @@
+% !TEX program = xelatex
+% =============================================================================
+% 全国大学生数学建模竞赛 AI 工具使用详情 LaTeX 模板
+% 基于 mathmodel-writing Skill 的 CUMCM LaTeX 模板改制。
+% 编译：xelatex main.tex（至少两遍，以生成正确目录页码）
+% =============================================================================
+\documentclass[fontset=windows,12pt,a4paper]{ctexart}
+
+% ---------- 页面与基础字体 ----------
+\usepackage[
+  a4paper,
+  top=2.35cm,
+  bottom=2.25cm,
+  left=2.55cm,
+  right=2.55cm,
+  headheight=15pt,
+  headsep=0.55cm,
+  footskip=1.05cm
+]{geometry}
+\usepackage{fontspec}
+\IfFontExistsTF{Times New Roman}{\setmainfont{Times New Roman}}{}
+\IfFontExistsTF{SimSun}{\setCJKmainfont{SimSun}}{}
+\IfFontExistsTF{SimHei}{\setCJKsansfont{SimHei}}{}
+\linespread{1.34}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0pt}
+
+% ---------- 常用宏包：只依赖 CUMCM 中文、LaTeX 推荐和 XeTeX 集合 ----------
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage[hidelinks,unicode]{hyperref}
+
+% ---------- 页眉页脚 ----------
+\newcommand{\HeaderText}{全国大学生数学建模竞赛 AI 工具使用详情}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{\songti\zihao{-5}\HeaderText}
+\fancyfoot[C]{\zihao{5}\thepage}
+\renewcommand{\headrulewidth}{0.45pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% ---------- 标题编号与格式 ----------
+\ctexset{
+  section = {
+    name = {,、},
+    number = \chinese{section},
+    format = \centering\heiti\zihao{3},
+    aftername = \quad,
+    beforeskip = 1.45ex plus .2ex,
+    afterskip = 1.05ex plus .1ex
+  },
+  subsection = {
+    name = {（,）},
+    number = \chinese{subsection},
+    format = \heiti\zihao{-4},
+    aftername = \quad,
+    beforeskip = 1.10ex plus .2ex,
+    afterskip = 0.45ex
+  }
+}
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+
+% ---------- 目录样式 ----------
+\makeatletter
+\renewcommand{\tableofcontents}{%
+  \section*{目录}%
+  \@starttoc{toc}%
+}
+\renewcommand*\l@section{\@dottedtocline{1}{0em}{3.8em}}
+\renewcommand*\l@subsection{\@dottedtocline{2}{2.2em}{4.3em}}
+\makeatother
+
+% ---------- 表格与占位文字 ----------
+\definecolor{placeholdergray}{gray}{0.48}
+\newcommand{\placeholder}[1]{\textcolor{placeholdergray}{【#1】}}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcommand{\tabletitle}[1]{%
+  \begin{center}
+    {\heiti\zihao{5}#1}
+  \end{center}
+  \vspace{-0.55em}
+}
+
+% 工具表行：序号、工具名称、版本或型号、服务提供方、主要用途
+\newcommand{\AItoolrow}[5]{#1 & #2 & #3 & #4 & #5 \\}
+% 核验表行：编号、AI 输出内容摘要、采纳情况、人工修改、核验方法、对应位置
+\newcommand{\adoptionrow}[6]{#1 & #2 & #3 & #4 & #5 & #6 \\}
+
+% 典型交互记录环境：\begin{interactionrecord}{R1}{标题} ... \end{interactionrecord}
+\newenvironment{interactionrecord}[2]{%
+  \subsection{交互记录 #1：#2}
+  \begin{enumerate}
+    \setlength{\itemsep}{0.55em}
+    \setlength{\topsep}{0.2em}
+}{%
+  \end{enumerate}
+}
+
+% ---------- 用户集中填写区 ----------
+\input{config}
+
+\begin{document}
+\setcounter{page}{1}
+
+% ==================== 封面 ====================
+\thispagestyle{fancy}
+\begin{center}
+  \vspace*{0.55cm}
+  {\heiti\zihao{2}\bfseries AI 工具使用详情}
+\end{center}
+
+\vspace*{9.6cm}
+\begin{center}
+  \renewcommand{\arraystretch}{1.85}
+  \begin{tabular}{@{}>{\heiti}p{2.6cm}p{9.3cm}@{}}
+    参赛队号： & \TeamNumber \\
+    赛题编号： & \ProblemNumber \\
+    论文题目： & \PaperTitle \\
+  \end{tabular}
+\end{center}
+\clearpage
+
+% ==================== 目录 ====================
+\thispagestyle{fancy}
+\tableofcontents
+\clearpage
+
+% ==================== 正文 ====================
+\input{sections/ai_usage}
+
+\end{document}

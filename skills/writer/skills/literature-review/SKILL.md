@@ -9,7 +9,7 @@ description: "Conduct systematic, multi-database literature reviews and research
 
 Conduct systematic, comprehensive literature reviews following rigorous academic methodology. Search multiple literature databases, synthesize findings thematically, verify all citations for accuracy, and generate professional output documents in markdown and PDF formats.
 
-Use `$paper-lookup` as the default reproducible database layer, supplemented by the current harness's web search and any scholarly databases available in the user's environment. Optional tools such as `parallel-cli`, gget, or BioServices may improve coverage but are not required for this skill to function.
+Follow the repository-wide [citation policy](../mathmodel-writing/references/citation_policy.md): use current web search and official paper pages for direct verification, `$paper-lookup` for reproducible scholarly APIs, and this Skill for systematic screening and synthesis. Domain-specific tools such as gget or BioServices are optional enhancements and are never required for the core review workflow.
 
 ## When to Use This Skill
 
@@ -70,19 +70,13 @@ review is in [references/example_workflow.md](references/example_workflow.md).
 ## Best Practices
 
 ### Search Strategy
-1. **Start with reproducible scholarly search**: Use `$paper-lookup` and record exact queries, endpoints, dates, limits, and result counts.
+1. **Follow the shared retrieval priority**: Use current web search/official pages for direct verification and `$paper-lookup` for reproducible structured retrieval; record exact queries, endpoints, dates, limits, and result counts.
 2. **Use multiple databases** (normally at least 3): Choose databases that fit the discipline; a general web search is discovery support, not a substitute for every scholarly index.
 3. **Include preprint servers**: Captures latest unpublished findings
 4. **Document everything**: Save search strings, dates, database names, result counts, and raw or normalized results to the chosen workspace.
 5. **Test and refine**: Run pilot searches, review results, adjust search terms
 6. **Sort by citations**: When available, sort search results by citation count to surface influential work first
 7. **Verify promising results**: Fetch permissible abstracts or full text from primary scholarly sources before full-text screening.
-
-### Screening and Selection
-1. **Use multiple databases** (minimum 3): Ensures comprehensive coverage
-2. **Include preprint servers**: Captures latest unpublished findings
-3. **Document everything**: Search strings, dates, result counts for reproducibility
-4. **Test and refine**: Run pilot searches, review results, adjust search terms
 
 ### Screening and Selection
 1. **Use clear criteria**: Document inclusion/exclusion criteria before screening
@@ -175,7 +169,6 @@ If the host already provides additional database, extraction, visualization, or 
 
 ### Optional tools
 
-- `parallel-cli` for additional broad web discovery.
 - Pandoc plus a TeX distribution for PDF generation.
 - `OPENROUTER_API_KEY` only for the optional external schematic generator.
 

@@ -31,7 +31,7 @@ figures/
 reports/DRAWIO_REPORT.md
 ```
 
-如果某类图不需要生成，必须在 `reports/DRAWIO_REPORT.md` 中说明原因。竞赛论文通常至少需要一张 `fig_roadmap` 技术路线图。
+当模型包含三个以上相互依赖的阶段、多个分支，或仅靠文字难以解释结构时，优先绘制 `fig_roadmap` 技术路线图。若流程简单、版面受限或图不能提供额外信息，可以不画，并在 `reports/DRAWIO_REPORT.md` 中简要说明。
 
 读取这些文件的目的不是提取数据作图，而是理解论文方法、章节结构、子问题关系和已有图表，避免重复。
 

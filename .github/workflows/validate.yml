@@ -1,0 +1,42 @@
+name: Validate Skills
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  quick:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+        python: ["3.11", "3.12"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Validate repository
+        run: python scripts/validate_repo.py --quick --json reports/repo_validation.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: validation-${{ matrix.os }}-py${{ matrix.python }}
+          path: reports/repo_validation.json
+
+  full-toolchain-report:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Inspect optional rendering toolchains
+        run: python scripts/validate_repo.py --full --json reports/repo_validation_full.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: full-toolchain-report
+          path: reports/repo_validation_full.json

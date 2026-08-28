@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mathmodelagent.local/schemas/model_manifest.schema.json",
+  "title": "Mathematical Modeling Model Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "problem_id",
+    "subproblems",
+    "assumptions",
+    "variables",
+    "objectives",
+    "constraints",
+    "planned_metrics",
+    "planned_figures"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "problem_id": {"type": "string", "minLength": 1},
+    "subproblems": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "text", "testable", "risk"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "text": {"type": "string", "minLength": 1},
+          "testable": {"type": "boolean"},
+          "risk": {"enum": ["low", "medium", "high"]},
+          "planned_check": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "variables": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["symbol", "name", "unit", "source"],
+        "properties": {
+          "symbol": {"type": "string", "minLength": 1},
+          "name": {"type": "string", "minLength": 1},
+          "unit": {"type": ["string", "null"]},
+          "source": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "objectives": {"type": "array", "items": {"$ref": "#/$defs/expression"}},
+    "constraints": {"type": "array", "items": {"$ref": "#/$defs/expression"}},
+    "planned_metrics": {"type": "array", "items": {"type": "string"}},
+    "planned_figures": {"type": "array", "items": {"type": "string"}},
+    "created_at": {"type": "string", "format": "date-time"}
+  },
+  "$defs": {
+    "expression": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "description", "expression"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "description": {"type": "string", "minLength": 1},
+        "expression": {"type": "string", "minLength": 1},
+        "unit": {"type": ["string", "null"]}
+      }
+    }
+  }
+}

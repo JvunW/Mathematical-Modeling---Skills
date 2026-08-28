@@ -19,6 +19,7 @@
   spacing: 0.75em,
 )
 #set enum(numbering: "1.", spacing: 0.78em)
+#set math.equation(numbering: "(1)")
 #show figure.caption: it => text(size: 10pt)[#it]
 
 #let cn-numbering(..nums) = {

@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "name": "Mathematical Modeling Skills end-to-end rubric",
+  "total_score": 100,
+  "dimensions": [
+    {
+      "id": "problem_coverage",
+      "label": "题意覆盖",
+      "max_score": 15,
+      "core": false,
+      "question": "是否回答全部子问题并满足交付要求"
+    },
+    {
+      "id": "data_assumptions",
+      "label": "数据与假设",
+      "max_score": 15,
+      "core": false,
+      "question": "清洗、单位、缺失值和假设是否有依据"
+    },
+    {
+      "id": "model_correctness",
+      "label": "模型正确性",
+      "max_score": 20,
+      "core": true,
+      "question": "变量、目标、约束、算法和统计方法是否成立"
+    },
+    {
+      "id": "code_reproducibility",
+      "label": "代码与复现",
+      "max_score": 15,
+      "core": true,
+      "question": "代码能否运行，随机性、依赖和数据路径是否受控"
+    },
+    {
+      "id": "validation_robustness",
+      "label": "验证与稳健性",
+      "max_score": 15,
+      "core": false,
+      "question": "是否有基线、敏感性、误差或边界检查"
+    },
+    {
+      "id": "paper_consistency",
+      "label": "论文一致性",
+      "max_score": 10,
+      "core": true,
+      "question": "文字、公式、表格、图和结果是否一致"
+    },
+    {
+      "id": "citations_delivery",
+      "label": "引用与交付",
+      "max_score": 10,
+      "core": false,
+      "question": "引用是否真实，最终 PDF/DOCX 是否可用且无占位符"
+    }
+  ],
+  "thresholds": {
+    "run_pass_score": 85,
+    "run_core_fraction": 0.7,
+    "release_case_passes": 6,
+    "nine_point_zero_case_passes": 7,
+    "nine_point_five_case_scores_at_least_85": 7,
+    "nine_point_five_mean_score": 90,
+    "nine_point_five_core_fraction": 0.8,
+    "required_repeats_per_case": 3
+  }
+}

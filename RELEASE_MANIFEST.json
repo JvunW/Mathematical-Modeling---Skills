@@ -1,0 +1,19 @@
+{
+  "release": "2.0.0",
+  "quality_status": "automated-validation-required; end-to-end-benchmark-pending",
+  "plugins": {
+    "modeler": "2.0.0",
+    "coder": "2.0.0",
+    "writer": "2.0.0"
+  },
+  "schemas": {
+    "model_manifest": "1.0",
+    "results_manifest": "1.0",
+    "paper_evidence_map": "1.0",
+    "verification_report": "1.0"
+  },
+  "evaluation_baseline": "evals/baselines/2.0.0.json",
+  "source_revision": "git tag v2.0.0",
+  "rollback_target": "v1.x",
+  "migration_guide": "MIGRATION.md"
+}

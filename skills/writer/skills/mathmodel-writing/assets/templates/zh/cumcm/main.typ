@@ -29,6 +29,7 @@
 )
 #set heading(numbering: cn-numbering)
 #set enum(numbering: "1.")
+#set math.equation(numbering: "(1)")
 #set table(inset: 0.45em)
 #show heading.where(level: 1): set align(center)
 #show heading.where(level: 1): set text(size: 17.3pt, weight: "bold")

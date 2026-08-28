@@ -34,6 +34,7 @@
 #set par(first-line-indent: (amount: 2em, all: true), justify: true, leading: 0.95em, spacing: 0.45em)
 #set heading(numbering: cn-numbering)
 #set enum(numbering: "1.")
+#set math.equation(numbering: "(1)")
 #set table(inset: (x: 0.5em, y: 0.52em), stroke: 0.55pt)
 
 #show heading.where(level: 1): set align(center)

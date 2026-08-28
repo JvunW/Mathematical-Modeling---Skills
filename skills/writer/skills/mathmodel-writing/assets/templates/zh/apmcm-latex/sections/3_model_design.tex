@@ -6,12 +6,14 @@
 
 \subsection{核心模型}
 
-\[
-  \hat{y} = f(\mathbf{x}; \theta) = \sum_{i=1}^{n} \theta_i \phi_i(\mathbf{x})
-\]
+\begin{equation}
+\hat{y} = f(\mathbf{x}; \theta) = \sum_{i=1}^{n} \theta_i \phi_i(\mathbf{x})
+  \label{eq:3-model-design-1}
+\end{equation}
 
 模型参数的优化目标是最小化正则化损失函数：
 
-\[
-  \mathcal{L}(\theta) = \frac{1}{N} \sum_{i=1}^{N} (y_i - \hat{y}_i)^2 + \lambda \|\theta\|_2^2
-\]
+\begin{equation}
+\mathcal{L}(\theta) = \frac{1}{N} \sum_{i=1}^{N} (y_i - \hat{y}_i)^2 + \lambda \|\theta\|_2^2
+  \label{eq:3-model-design-2}
+\end{equation}

@@ -184,7 +184,7 @@ These are structural — they can't be fixed in analysis, only in design.
    stratify, or randomize across each.
 3. **Pick the design** using the decision tree and reference files.
 4. **Decide replication** at the correct level (and get n from the
-   **statistical-power** skill for the chosen design).
+   **statistical-analysis** skill for power analysis of the chosen design).
 5. **Generate the layout** with `randomization.py` / `doe_designs.py`, seeded.
 6. **Randomize run/processing order** and plate/batch positions.
 7. **Document** the design, seed, and schedule (pre-register if possible) so the
@@ -216,7 +216,7 @@ These are structural — they can't be fixed in analysis, only in design.
   interim stopping, and adaptive sample-size re-estimation.
 
 ### Related skills
-- **statistical-power** — required sample size / power for the design you've chosen.
+- **statistical-analysis** — required sample size and power for the design you've chosen.
 - **statistical-analysis** — running and reporting the analysis after collection.
 - **statsmodels** / **pymc** — fitting the models the design implies.
 

@@ -8,6 +8,7 @@
 #set par(first-line-indent: (amount: 2em, all: true), justify: true, leading: 0.78em, spacing: 0.55em)
 #set heading(numbering: "1.1")
 #set enum(numbering: "1.")
+#set math.equation(numbering: "(1)")
 #show heading.where(level: 1): it => block(above: 1.8em, below: 1.0em)[#align(center)[#text(font: ("Heiti SC", "STHeiti", "Songti SC"), size: 16pt, weight: "bold")[#it]]]
 #show heading.where(level: 2): it => block(above: 1.25em, below: 0.65em)[#text(font: ("Heiti SC", "STHeiti", "Songti SC"), size: 14pt, weight: "bold")[#it]]
 #show heading.where(level: 3): it => block(above: 0.9em, below: 0.4em)[#text(font: ("Heiti SC", "STHeiti", "Songti SC"), size: 12pt, weight: "bold")[#it]]

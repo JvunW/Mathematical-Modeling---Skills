@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mathmodelagent.local/schemas/results_manifest.schema.json",
+  "title": "Mathematical Modeling Results Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "run_id",
+    "code_revision",
+    "data_fingerprint",
+    "environment_fingerprint",
+    "parameters",
+    "randomness_policy",
+    "metrics",
+    "figures",
+    "tables",
+    "checks"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "run_id": {"type": "string", "minLength": 1},
+    "code_revision": {"type": "string", "minLength": 1},
+    "data_fingerprint": {"type": "string", "minLength": 1},
+    "environment_fingerprint": {"type": "string", "minLength": 1},
+    "parameters": {"type": "object"},
+    "randomness_policy": {"type": "string", "minLength": 1},
+    "metrics": {"type": "array", "items": {"$ref": "#/$defs/metric"}},
+    "figures": {"type": "array", "items": {"$ref": "#/$defs/file_artifact"}},
+    "tables": {"type": "array", "items": {"$ref": "#/$defs/file_artifact"}},
+    "checks": {"type": "array", "items": {"$ref": "#/$defs/check"}},
+    "created_at": {"type": "string", "format": "date-time"}
+  },
+  "$defs": {
+    "metric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_id", "name", "value", "unit", "split"],
+      "properties": {
+        "artifact_id": {"type": "string", "minLength": 1},
+        "name": {"type": "string", "minLength": 1},
+        "value": {"type": "number"},
+        "unit": {"type": ["string", "null"]},
+        "split": {"type": ["string", "null"]}
+      }
+    },
+    "file_artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_id", "path", "source_script"],
+      "properties": {
+        "artifact_id": {"type": "string", "minLength": 1},
+        "path": {"type": "string", "minLength": 1},
+        "source_script": {"type": "string", "minLength": 1},
+        "content_hash": {"type": ["string", "null"]}
+      }
+    },
+    "check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "status", "evidence"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "status": {"enum": ["pass", "fail", "warning", "skipped"]},
+        "evidence": {"type": "string"}
+      }
+    }
+  }
+}

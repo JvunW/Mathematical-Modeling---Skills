@@ -1,6 +1,6 @@
 {
   "name": "coder",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "Reproducible model implementation, debugging, testing, scientific figures, diagrams, and environment checks.",
   "author": {
     "name": "MathModelAgent contributors"

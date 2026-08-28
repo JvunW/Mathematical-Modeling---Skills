@@ -21,6 +21,7 @@ OFFICE_REL_NS = (
 )
 PACKAGE_REL_NS = "http://schemas.openxmlformats.org/package/2006/relationships"
 VML_NS = "urn:schemas-microsoft-com:vml"
+EQUATION_SEQUENCE_RE = re.compile(r"\bSEQ\s+(?:Equation|公式)\b", re.IGNORECASE)
 
 BLOCK_DOLLAR_RE = re.compile(r"(?<!\\)\$\$(.+?)(?<!\\)\$\$", re.DOTALL)
 INLINE_DOLLAR_RE = re.compile(
@@ -70,6 +71,11 @@ class SourceMath:
     paren_inline: int
     environments: int
 
+    @property
+    def display_total(self) -> int:
+        """Return source constructs that should render as numbered display equations."""
+        return self.dollar_blocks + self.bracket_blocks + self.environments
+
 
 @dataclass(frozen=True)
 class SourceImages:
@@ -90,6 +96,9 @@ class VerificationReport:
     xml_parts_checked: int = 0
     omml_total: int = 0
     omml_paragraphs: int = 0
+    expected_numbered_equations: int = 0
+    equation_number_fields: int = 0
+    equation_number_values: list[int] = field(default_factory=list)
     mathml_elements: int = 0
     raw_math_markers: int = 0
     expected_source_formulas: int = 0
@@ -204,6 +213,7 @@ def inspect_docx(
     expected_min: int | None = None,
     expected_images: int | None = None,
     expected_unique_images: int | None = None,
+    expected_numbered: int | None = None,
 ) -> VerificationReport:
     """Inspect DOCX package integrity and native OMML content.
 
@@ -213,6 +223,7 @@ def inspect_docx(
         expected_min: Optional minimum number of OMML math objects.
         expected_images: Optional minimum number of embedded image occurrences.
         expected_unique_images: Optional minimum number of packaged media files.
+        expected_numbered: Optional minimum number of numbered display equations.
 
     Returns:
         Structured verification report. Invalid packages are reported, not raised.
@@ -242,6 +253,9 @@ def inspect_docx(
                 report.errors.append(f"源文件不是有效 UTF-8: {exc}")
 
     report.expected_source_formulas = max(expected_min or 0, source_math.total)
+    report.expected_numbered_equations = max(
+        expected_numbered or 0, source_math.display_total
+    )
     report.expected_source_images = max(expected_images or 0, source_images.total)
     report.expected_unique_source_images = max(
         expected_unique_images or 0, source_images.unique
@@ -296,6 +310,23 @@ def inspect_docx(
                     root.findall(f".//{{{OMML_NS}}}oMathPara")
                 )
                 report.mathml_elements += len(root.findall(f".//{{{MATHML_NS}}}*"))
+                simple_fields = root.findall(f".//{{{WORD_NS}}}fldSimple")
+                for field in simple_fields:
+                    instruction = field.attrib.get(f"{{{WORD_NS}}}instr", "")
+                    if not EQUATION_SEQUENCE_RE.search(instruction):
+                        continue
+                    report.equation_number_fields += 1
+                    value = "".join(
+                        node.text or ""
+                        for node in field.findall(f".//{{{WORD_NS}}}t")
+                    ).strip()
+                    if value.isdigit():
+                        report.equation_number_values.append(int(value))
+                report.equation_number_fields += sum(
+                    1
+                    for node in root.findall(f".//{{{WORD_NS}}}instrText")
+                    if EQUATION_SEQUENCE_RE.search(node.text or "")
+                )
                 report.image_occurrences += sum(
                     1
                     for node in root.findall(f".//{{{DRAWING_NS}}}blip")
@@ -322,6 +353,19 @@ def inspect_docx(
             "OMML 数量少于源公式数量: "
             f"expected>={report.expected_source_formulas}, actual={report.omml_total}"
         )
+    if report.expected_numbered_equations > report.equation_number_fields:
+        report.errors.append(
+            "Word 公式编号字段少于源行间公式数量: "
+            f"expected>={report.expected_numbered_equations}, "
+            f"actual={report.equation_number_fields}"
+        )
+    if report.equation_number_values:
+        expected_values = list(range(1, len(report.equation_number_values) + 1))
+        if report.equation_number_values != expected_values:
+            report.errors.append(
+                "Word 公式编号不连续或顺序错误: "
+                f"actual={report.equation_number_values}"
+            )
     if report.mathml_elements:
         report.errors.append(
             f"发现 {report.mathml_elements} 个 MathML 节点，目标格式应为 Word OMML"
@@ -378,6 +422,12 @@ def build_parser() -> argparse.ArgumentParser:
         default=None,
         help="要求的最少唯一媒体文件数量",
     )
+    parser.add_argument(
+        "--expected-numbered",
+        type=int,
+        default=None,
+        help="要求的最少已编号行间公式数量",
+    )
     parser.add_argument("--report", type=Path, help="可选 JSON 报告输出路径")
     return parser
 
@@ -389,6 +439,7 @@ def main() -> int:
         ("--expected-min", args.expected_min),
         ("--expected-images", args.expected_images),
         ("--expected-unique-images", args.expected_unique_images),
+        ("--expected-numbered", args.expected_numbered),
     ):
         if value is not None and value < 0:
             print(f"ERROR: {option} 不能为负数", file=sys.stderr)
@@ -400,6 +451,7 @@ def main() -> int:
         args.expected_min,
         args.expected_images,
         args.expected_unique_images,
+        args.expected_numbered,
     )
     if args.report:
         _write_report(report, args.report)

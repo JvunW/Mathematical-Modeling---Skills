@@ -52,7 +52,7 @@ Python support is thinner than for fixed designs; common options:
 - For custom rules, **simulate** the whole sequential procedure (generate data, apply
   the boundaries look by look, repeat) to confirm the realized Type I error and to
   estimate expected sample size and power. This mirrors the simulation approach in the
-  **statistical-power** skill and is the most flexible route.
+  **statistical-analysis** skill and is the most flexible route.
 
 ## Adaptive designs
 

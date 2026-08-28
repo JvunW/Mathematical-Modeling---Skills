@@ -39,6 +39,7 @@
 #set text(font: roman, size: 12pt, lang: "en")
 #set par(first-line-indent: 2em, justify: true, leading: 0.95em, spacing: 0.5em)
 #set enum(numbering: "1.", spacing: 0.35em)
+#set math.equation(numbering: "(1)")
 #show figure.caption: it => text(size: 11pt, weight: "bold")[#it]
 
 #let sec(body) = block(width: 100%, above: 1.55em, below: 1.25em)[

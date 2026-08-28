@@ -1,0 +1,4 @@
+interface:
+  display_name: "数学建模 · 论文质询"
+  short_description: "分轮压力测试题目覆盖、论点证据、结果边界与摘要主线"
+  default_prompt: "Use $mathmodel-writing-grill to stress-test this mathematical modeling paper's claim-evidence chain before delivery."

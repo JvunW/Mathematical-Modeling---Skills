@@ -60,6 +60,7 @@
   spacing: 0.12em,
 )
 #set enum(numbering: "1.", spacing: 0.18em)
+#set math.equation(numbering: "(1)")
 #show figure.caption: it => text(size: 9pt)[#it]
 
 #align(center)[

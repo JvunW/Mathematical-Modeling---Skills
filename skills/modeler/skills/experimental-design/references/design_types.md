@@ -58,7 +58,7 @@ Watch for:
 - **Correlation within subject** — the repeated observations are not independent; the
   analysis must model it (mixed model / repeated-measures ANOVA). Sample-size/power
   for these depends on the within-subject correlation — use simulation in the
-  **statistical-power** skill.
+  **statistical-analysis** skill.
 
 ## Split-plot designs
 
@@ -85,7 +85,7 @@ correlated, it is effectively the unit of replication too.
   helps much less than adding clusters.
 - The **design effect** `DEFF = 1 + (m − 1)·ICC` (m = cluster size) quantifies how
   much the effective sample size shrinks; even a small ICC with large clusters costs
-  dearly. Power these by simulation (see **statistical-power**).
+  dearly. Power these by simulation (see **statistical-analysis**).
 - Analyze with a method that accounts for clustering (mixed model with a cluster
   random effect, or GEE). Analyzing individuals as independent is pseudoreplication.
 
@@ -126,4 +126,4 @@ How to avoid it:
 
 Technical replicates are still worth taking — they sharpen each unit's estimate — but
 report and analyze them as what they are, never as independent biological replicates.
-For sample size of nested/clustered designs, use simulation in **statistical-power**.
+For sample size of nested/clustered designs, use simulation in **statistical-analysis**.

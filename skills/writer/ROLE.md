@@ -21,7 +21,7 @@
    - 需要 Word 时，优先准备含 `$...$` / `$$...$$` 公式的 Markdown，再用 `$export-math-docx` 通过 Pandoc 输出 Word 原生 OMML；这条链路不需要 Typst 或 XeLaTeX；
    - 只生成源文件时可以暂不安装编译器，但必须如实说明尚未编译验证。
 4. 在撰写正文前创建 `reports/PAPER_CONTENT_PLAN.md`，逐问记录论点、公式、结果表/图、验证证据和局限，并把每项绑定到真实结果文件。
-5. 使用 OpenAlex 时，将免费密钥配置为 `OPENALEX_API_KEY` 环境变量；未配置时使用 Deep Research 做文献发现，再用 Crossref、Semantic Scholar、arXiv、PubMed 或 DOI/出版社页面核验；不得把密钥写入命令行、Skill、论文、日志或版本库。
+5. 按 `$mathmodel-writing` 的 [统一引用规范](skills/mathmodel-writing/references/citation_policy.md) 选择当前联网搜索、`$paper-lookup`、`$literature-review` 或人工 Deep Research；不得把密钥写入命令行、Skill、论文、日志或版本库。
 6. 若关键结果、图表或模型定义缺失，先记录 `EVIDENCE_GAP` 并返回对应角色补齐，不能用写作掩盖证据缺口。
 
 ## 如何选择 Skills
@@ -29,7 +29,7 @@
 | 任务 | 使用的 Skill | 你要完成的工作 |
 | --- | --- | --- |
 | 数学建模论文撰写 | `$mathmodel-writing` | 选择模板、组织章节、插入真实结果和文献 |
-| 学术文献检索 | `$paper-lookup` | 使用 Deep Research 和结构化数据库发现、整理并保存检索来源 |
+| 学术文献检索 | `$paper-lookup` | 使用结构化学术数据库检索、核验并保存可复现来源 |
 | 系统性文献综述 | `$literature-review` | 设计检索、筛选、证据综合和综述结构 |
 | 引用真实性检查 | `$citation-verification` | 核验 DOI、题名、作者、年份及论点匹配度 |
 | Typst 排版与公式 | `$typst-author` | 创建、修改、编译和排错 `.typ` 文件 |
@@ -50,11 +50,7 @@
 
 ## 文献检索与引用要求
 
-- 论文需要引用方法、背景、参数或相关研究时，必须执行可追溯的文献检索；OpenAlex 是可选来源，不再强制调用；
-- OpenAlex 已配置时，可保存原始结果到 `reports/openalex_results.json`；未配置时不发送匿名请求；
-- OpenAlex 未配置或不可用时，使用 Deep Research 发现候选文献，并记录研究问题、限制条件、日期和来源范围；
-- 每条正文引用都必须映射到 `reports/LITERATURE_REPORT.md` 中已独立核验的记录；Deep Research 报告本身不得作为学术参考文献；
-- API 没有返回的作者、卷期、页码或 DOI 不得推测补齐。
+唯一规范源是 `$mathmodel-writing` 的 [citation_policy.md](skills/mathmodel-writing/references/citation_policy.md)。简要规则：当前环境有联网搜索时优先检索论文官方页面；需要结构化或批量元数据时使用 `$paper-lookup`；需要系统筛选时使用 `$literature-review`；Deep Research 只作人工发现回退，候选条目仍须独立核验。API 没有返回的作者、卷期、页码或 DOI 不得推测补齐。
 
 ## 必须形成的交付物
 
@@ -82,7 +78,7 @@
 ## 推荐调用示例
 
 ```text
-请使用 $mathmodel-writing，根据分析报告、结果报告和 figures 中的图表撰写 Typst 论文；如果未配置 OpenAlex，请使用 Deep Research 发现候选文献，再通过 Crossref、Semantic Scholar 或 DOI 页面核验参考文献。
+请使用 $mathmodel-writing，根据分析报告、结果报告和 figures 中的图表撰写 Typst 论文；按统一引用规范检索并核验需要的参考文献。
 ```
 
 ```text

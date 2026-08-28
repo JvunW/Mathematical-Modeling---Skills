@@ -8,9 +8,10 @@
 
 采用多元线性回归作为基础模型：
 
-\[
-  y = \theta_0 + \theta_1 x_1 + \theta_2 x_2 + \dots + \theta_n x_n + \varepsilon
-\]
+\begin{equation}
+y = \theta_0 + \theta_1 x_1 + \theta_2 x_2 + \dots + \theta_n x_n + \varepsilon
+  \label{eq:4-solution-1}
+\end{equation}
 
 同时引入随机森林模型进行对比分析，通过集成多棵决策树提高精度和鲁棒性。
 
@@ -22,9 +23,10 @@
 
 采用 LASSO 回归筛选关键特征：
 
-\[
-  \min_{\theta} \frac{1}{2N} \sum_{i=1}^{N} (y_i - \theta^T x_i)^2 + \lambda \|\theta\|_1
-\]
+\begin{equation}
+\min_{\theta} \frac{1}{2N} \sum_{i=1}^{N} (y_i - \theta^T x_i)^2 + \lambda \|\theta\|_1
+  \label{eq:4-solution-2}
+\end{equation}
 
 \subsection{模型优化}
 
@@ -34,12 +36,14 @@
 
 将问题建模为约束优化问题：
 
-\[
-  \min \quad f(\mathbf{x}) = \sum_{i=1}^{n} c_i(x_i)
-\]
-\[
-  \text{s.t.} \quad g_j(\mathbf{x}) \leq 0, \quad h_k(\mathbf{x}) = 0
-\]
+\begin{equation}
+\min \quad f(\mathbf{x}) = \sum_{i=1}^{n} c_i(x_i)
+  \label{eq:4-solution-3}
+\end{equation}
+\begin{equation}
+\text{s.t.} \quad g_j(\mathbf{x}) \leq 0, \quad h_k(\mathbf{x}) = 0
+  \label{eq:4-solution-4}
+\end{equation}
 
 \subsection{算法求解}
 

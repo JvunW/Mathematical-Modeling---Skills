@@ -1,0 +1,4 @@
+interface:
+  display_name: "数学建模 · 建模质询"
+  short_description: "分轮压力测试题意、数据、假设、目标约束、求解与验证方案"
+  default_prompt: "Use $mathmodel-analysis-grill to stress-test this mathematical modeling plan before implementation."

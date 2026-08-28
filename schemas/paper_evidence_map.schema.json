@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mathmodelagent.local/schemas/paper_evidence_map.schema.json",
+  "title": "Paper Claim-Evidence Map",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "claims"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "section", "claim", "evidence", "citation_ids", "status"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "section": {"type": "string", "minLength": 1},
+          "claim": {"type": "string", "minLength": 1},
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["artifact_id", "version", "content_hash"],
+              "properties": {
+                "artifact_id": {"type": "string", "minLength": 1},
+                "version": {"type": "integer", "minimum": 1},
+                "content_hash": {"type": "string", "minLength": 1}
+              }
+            }
+          },
+          "citation_ids": {"type": "array", "items": {"type": "string"}},
+          "status": {"enum": ["verified", "stale", "unverified"]}
+        }
+      }
+    },
+    "created_at": {"type": "string", "format": "date-time"}
+  }
+}

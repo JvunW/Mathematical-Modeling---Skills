@@ -38,6 +38,27 @@ LATEX_TABLE = re.compile(r"\\begin\s*\{table\}", re.IGNORECASE)
 LATEX_FIGURE = re.compile(r"\\begin\s*\{figure\}", re.IGNORECASE)
 LATEX_SUBSECTION = re.compile(r"\\subsection\*?\s*\{", re.IGNORECASE)
 TYPST_SUBSECTION = re.compile(r"^==\s+", re.MULTILINE)
+TYPST_EQUATION_NUMBERING = re.compile(
+    r"#set\s+math\.equation\s*\(\s*numbering\s*:\s*(?!none\b)",
+    re.IGNORECASE,
+)
+TYPST_EQUATION_LABEL = re.compile(r"<(eq[-:][A-Za-z0-9_-]+)>")
+TYPST_EQUATION_REF = re.compile(r"@(eq[-:][A-Za-z0-9_-]+)\b")
+LATEX_UNNUMBERED_DISPLAY = re.compile(
+    r"(?<!\\)\\\[|\\begin\s*\{(?:equation|align|alignat|gather|multline)\*\}",
+    re.IGNORECASE,
+)
+LATEX_INTENTIONAL_UNNUMBERED = re.compile(
+    r"^%\s*equation-numbering:\s*intentional-unnumbered\s+reason=\S.*$",
+    re.IGNORECASE,
+)
+LATEX_NUMBERED_EQUATION = re.compile(
+    r"\\begin\s*\{(?P<env>equation|align|alignat|gather|multline)\}"
+    r"(?P<body>.*?)\\end\s*\{(?P=env)\}",
+    re.IGNORECASE | re.DOTALL,
+)
+LATEX_EQUATION_LABEL = re.compile(r"\\label\s*\{(eq:[^}]+)\}")
+LATEX_EQUATION_REF = re.compile(r"\\(?:eqref|ref)\s*\{(eq:[^}]+)\}")
 LATEX_CONTENT_BLOCK = re.compile(
     r"\\begin\s*\{(?:table|figure|equation|equation\*|align|align\*|gather|gather\*)\}.*?"
     r"\\end\s*\{(?:table|figure|equation|equation\*|align|align\*|gather|gather\*)\}",
@@ -54,6 +75,17 @@ def visible_content_chars(text: str, *, latex: bool) -> int:
         cleaned = LATEX_COMMAND.sub(" ", cleaned)
     cleaned = re.sub(r"[{}\\$#*_`~]", "", cleaned)
     return len(re.sub(r"\s+", "", cleaned))
+
+
+def has_intentional_unnumbered_marker(text: str, offset: int) -> bool:
+    """Return true when the nearest preceding nonblank line is an audited marker."""
+    preceding = text[:offset].splitlines()
+    for line in reversed(preceding[-3:]):
+        stripped = line.strip()
+        if not stripped:
+            continue
+        return bool(LATEX_INTENTIONAL_UNNUMBERED.fullmatch(stripped))
+    return False
 
 
 def parse_args() -> argparse.Namespace:
@@ -113,6 +145,7 @@ def scan(args: argparse.Namespace) -> dict:
     facts.append(f"Scanned {len(sources)} {extension} source file(s)")
     table_count = 0
     figure_count = 0
+    source_texts: dict[Path, str] = {}
 
     content_plan = paper_dir.parent / "reports" / "PAPER_CONTENT_PLAN.md"
     content_plan_text = ""
@@ -133,6 +166,7 @@ def scan(args: argparse.Namespace) -> dict:
         except UnicodeDecodeError:
             errors.append(f"Source is not valid UTF-8: {source}")
             continue
+        source_texts[source] = text
         for match in PLACEHOLDERS.finditer(text):
             line = text.count("\n", 0, match.start()) + 1
             errors.append(f"Placeholder {match.group(0)!r}: {source}:{line}")
@@ -165,8 +199,40 @@ def scan(args: argparse.Namespace) -> dict:
                     "expected at least 900 before visual/page review"
                 )
         if latex:
+            for match in LATEX_UNNUMBERED_DISPLAY.finditer(text):
+                if has_intentional_unnumbered_marker(text, match.start()):
+                    line = text.count("\n", 0, match.start()) + 1
+                    facts.append(f"Audited intentional unnumbered equation: {source}:{line}")
+                    continue
+                line = text.count("\n", 0, match.start()) + 1
+                errors.append(f"未编号行间公式: {source}:{line}")
+            for match in LATEX_NUMBERED_EQUATION.finditer(text):
+                if not LATEX_EQUATION_LABEL.search(match.group("body")):
+                    line = text.count("\n", 0, match.start()) + 1
+                    errors.append(f"已编号公式缺少 \\label{{eq:...}}: {source}:{line}")
             table_count += len(LATEX_TABLE.findall(text))
             figure_count += len(LATEX_FIGURE.findall(text))
+
+    combined_source = "\n".join(source_texts.values())
+    if latex:
+        labels = LATEX_EQUATION_LABEL.findall(combined_source)
+        references = LATEX_EQUATION_REF.findall(combined_source)
+    else:
+        if not TYPST_EQUATION_NUMBERING.search(combined_source):
+            errors.append(
+                '缺少 Typst 公式自动编号规则：#set math.equation(numbering: "(1)")'
+            )
+        labels = TYPST_EQUATION_LABEL.findall(combined_source)
+        references = TYPST_EQUATION_REF.findall(combined_source)
+    duplicate_labels = sorted({label for label in labels if labels.count(label) > 1})
+    if duplicate_labels:
+        errors.append("公式标签重复: " + ", ".join(duplicate_labels))
+    dangling_references = sorted(set(references) - set(labels))
+    if dangling_references:
+        errors.append("公式引用没有对应标签: " + ", ".join(dangling_references))
+    facts.append(
+        f"Found {len(labels)} equation label(s) and {len(references)} equation reference(s)"
+    )
 
     appendix = next((source for source in sources if source.name.lower() in {"a_code.tex", "a_code.typ"}), None)
     if appendix is not None and not CODE_LISTING.search(appendix.read_text(encoding="utf-8", errors="replace")):

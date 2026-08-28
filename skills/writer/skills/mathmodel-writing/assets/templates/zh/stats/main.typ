@@ -28,6 +28,7 @@
 )
 #set heading(numbering: cn-numbering)
 #set enum(numbering: "1.", spacing: 0.48em)
+#set math.equation(numbering: "(1)")
 #show heading.where(level: 1): it => block(above: 1.2em, below: 0.42em)[#align(
   left,
 )[#text(font: hei-font, size: 15pt, weight: "bold")[#it]]]
