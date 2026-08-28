@@ -60,6 +60,8 @@
 
 推荐用 Codex 的 `$skill-installer` 从本仓库 `main` 分支安装所需的完整 Skill 目录；升级时先备份并替换同名目录，安装后开启新任务使发现缓存刷新。三个插件 manifest 用于仓库分组和版本治理；不支持插件命令的 Codex CLI 仍可逐个安装 22 个 Skill。
 
+需要一次性准备常用 Python 依赖时，可在项目虚拟环境中运行 `python -m pip install -r requirements.txt`；具体题目仍应只安装实际需要的可选包。
+
 依赖分层：
 
 - 核心层：Python 3.10+ 和标准库，支持状态机、契约、仓库校验和基础检查；
