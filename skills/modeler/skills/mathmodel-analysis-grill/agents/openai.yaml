@@ -1,4 +1,4 @@
 interface:
-  display_name: "数学建模 · 建模质询"
-  short_description: "分轮压力测试题意、数据、假设、目标约束、求解与验证方案"
-  default_prompt: "Use $mathmodel-analysis-grill to stress-test this mathematical modeling plan before implementation."
+  display_name: "数学建模 · 用户思路十问"
+  short_description: "上传题目后向用户强制提出10个建模思路问题"
+  default_prompt: "Use $mathmodel-analysis-grill to ask me exactly 10 required questions about my modeling ideas before you design the solution."

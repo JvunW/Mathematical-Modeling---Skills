@@ -10,7 +10,7 @@
 |---|---|
 | `mathmodel-workflow` | 启动完整任务，维护 Gate、状态和交付路线 |
 | `mathmodel-analysis` | 拆题、定义变量、假设、目标和约束 |
-| `mathmodel-analysis-grill` | 在编码前压力测试建模方案 |
+| `mathmodel-analysis-grill` | 题目上传后向用户提出恰好 10 个建模思路问题并等待逐题回答 |
 | `mathmodel-references` | 查询数学建模规范与方法参考 |
 | `experimental-design` | 随机化、区组、因子和序贯实验设计 |
 | `statistical-analysis` | 统计检验、效应量、功效和回归诊断 |
@@ -75,8 +75,9 @@
 
 ```text
 题面与附件
-  → mathmodel-analysis
   → mathmodel-analysis-grill
+  → 用户逐题回答十问
+  → mathmodel-analysis
   → mathmodel-coding
   → 结果冻结
   → mathmodel-writing

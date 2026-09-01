@@ -16,13 +16,14 @@ description: "启动并协调完整数学建模任务。用于从赛题和附件
 
 ## 开始前确认
 
-只询问会实质改变工作流的问题：
+用户上传题目后，完成附件可读性检查，随后立即调用 `$mathmodel-analysis-grill` 的“用户思路十问”。不要另起一套启动问卷；把下列工作流信息结合具体题目纳入那 10 个问题，尤其是第 10 题：
 
-1. 最终交付路线：**Typst/PDF、LaTeX/PDF，还是 Word/DOCX**？
-2. 比赛或模板类型；若为 Word/DOCX，是否提供官方 `.docx` 模板？
-3. 论文语言。
-4. 子问题数量是否已知。
-5. 是否允许联网检索文献；若不允许，只使用用户材料并标记外部核验缺口。
+- 最终交付路线：Typst/PDF、LaTeX/PDF 或 Word/DOCX；
+- 比赛或模板类型，以及是否提供官方模板；
+- 论文语言、截止时间和团队工具约束；
+- 是否允许联网检索文献。
+
+必须展示恰好 10 个问题并等待用户逐题回答。在回答齐全前，不初始化建模方案、不调用分析、编码或写作阶段，也不得由 Agent 自行填入默认偏好。
 
 Word/DOCX 路线使用 Markdown 作为论文源文件，由 `$export-math-docx` 导出 Word 原生 OMML 公式；不得从 Typst 直接转换为 DOCX。
 
@@ -87,8 +88,8 @@ G6 DELIVERY_VERIFIED
 | Gate | 主责 Skill | 必需证据 |
 |---|---|---|
 | G0 | `$mathmodel-doctor` 或本 Skill | 环境、附件和输出路径可用 |
-| G1 | `$mathmodel-analysis` | `reports/model_manifest.json` |
-| G2 | `$mathmodel-analysis-grill`，按需配合统计/实验/不确定性 Skill | 方法质询已处理或记录豁免 |
+| G1 | `$mathmodel-analysis-grill` 与 `$mathmodel-analysis` | 用户十问已完成或显式豁免；`reports/model_manifest.json` 已生成 |
+| G2 | `$mathmodel-analysis`，按需配合统计/实验/不确定性 Skill | 方法、假设、约束和验证方案已形成且风险已记录 |
 | G3 | `$mathmodel-coding` | 可复现代码、检查结果和运行记录 |
 | G4 | Runtime | `results/results_manifest.json` 中的必需结果已冻结且 fresh |
 | G5 | `$mathmodel-writing` 与 `$mathmodel-writing-grill` | `reports/paper_evidence_map.json` 完整 |
@@ -98,13 +99,14 @@ G6 DELIVERY_VERIFIED
 
 ## 执行顺序
 
-1. **分析**：调用 `$mathmodel-analysis`，输出模型清单；复杂方案再调用 `$mathmodel-analysis-grill`。
-2. **编码**：调用 `$mathmodel-coding`，读取模型清单并输出结果清单。
-3. **图示**：仅在关系、步骤或结构确实需要可视化时调用 `$mathmodel-drawio`；数据图由编码阶段生成。
-4. **冻结结果**：记录代码、数据、配置和环境指纹。只有 lifecycle=`frozen` 且 validity=`fresh` 的必需结果才能用于论文。
-5. **写作**：调用 `$mathmodel-writing`，关键数字只引用结果清单，关键结论写入证据映射。
-6. **Word 导出**：仅 Word/DOCX 路线调用 `$export-math-docx`。
-7. **验收**：调用 `$mathmodel-verification`；未通过 G6 不得声称可提交。
+1. **用户思路采集**：题目上传后先调用 `$mathmodel-analysis-grill`，提出恰好 10 个问题并等待用户逐题回答。
+2. **分析**：十问完成后调用 `$mathmodel-analysis`，使用用户回答形成模型清单。
+3. **编码**：调用 `$mathmodel-coding`，读取模型清单并输出结果清单。
+4. **图示**：仅在关系、步骤或结构确实需要可视化时调用 `$mathmodel-drawio`；数据图由编码阶段生成。
+5. **冻结结果**：记录代码、数据、配置和环境指纹。只有 lifecycle=`frozen` 且 validity=`fresh` 的必需结果才能用于论文。
+6. **写作**：调用 `$mathmodel-writing`，关键数字只引用结果清单，关键结论写入证据映射。
+7. **Word 导出**：仅 Word/DOCX 路线调用 `$export-math-docx`。
+8. **验收**：调用 `$mathmodel-verification`；未通过 G6 不得声称可提交。
 
 每完成一个阶段，同步更新 `todo.md` 和工作流状态。阶段失败时保留诊断证据，不伪造缺失产物。
 
