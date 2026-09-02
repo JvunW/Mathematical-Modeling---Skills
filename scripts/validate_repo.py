@@ -75,14 +75,20 @@ def check_skill_structure(checks: list[dict[str, Any]], skills: list[Path]) -> N
             for field in ("display_name:", "short_description:", "default_prompt:"):
                 if field not in metadata_text:
                     errors.append(f"missing {field} in {metadata.relative_to(ROOT)}")
-    if len(skills) != 22:
-        errors.append(f"expected 22 skills, found {len(skills)}")
+    if len(skills) != 23:
+        errors.append(f"expected 23 skills, found {len(skills)}")
     record(checks, "skill_structure", errors, details={"count": len(skills)})
 
 
 def check_plugins(checks: list[dict[str, Any]], skills: list[Path]) -> int:
     errors: list[str] = []
     manifests = sorted(ROOT.glob("skills/*/.codex-plugin/plugin.json"))
+    try:
+        release = json.loads((ROOT / "RELEASE_MANIFEST.json").read_text(encoding="utf-8"))
+        expected_versions = release.get("plugins", {})
+    except (OSError, json.JSONDecodeError) as error:
+        errors.append(f"cannot read RELEASE_MANIFEST.json: {error}")
+        expected_versions = {}
     counts: dict[str, int] = {}
     for skill in skills:
         role = skill.parents[2].name
@@ -98,8 +104,13 @@ def check_plugins(checks: list[dict[str, Any]], skills: list[Path]) -> int:
             errors.append(f"plugin name mismatch: {manifest.relative_to(ROOT)}")
         if data.get("skills") != "./skills/":
             errors.append(f"plugin skill path mismatch: {manifest.relative_to(ROOT)}")
-        if not re.fullmatch(r"2\.0\.0(?:\+codex\..+)?", str(data.get("version", ""))):
-            errors.append(f"unexpected plugin version: {manifest.relative_to(ROOT)}")
+        version = str(data.get("version", ""))
+        if not re.fullmatch(r"\d+\.\d+\.\d+(?:\+codex\..+)?", version):
+            errors.append(f"invalid plugin version: {manifest.relative_to(ROOT)}")
+        elif expected_versions.get(role) != version:
+            errors.append(
+                f"plugin version does not match release manifest: {manifest.relative_to(ROOT)}"
+            )
         if counts.get(role, 0) == 0:
             errors.append(f"plugin has no discovered skills: {role}")
     if len(manifests) != 3:

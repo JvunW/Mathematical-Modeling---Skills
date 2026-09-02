@@ -2,7 +2,7 @@
 
 一套面向数学建模竞赛与研究型任务的 Codex Skills。它把题意分析、模型设计、可复现编码、科研图表、论文写作、文献核验和最终交付组织成可独立使用、也可协同运行的工作流。
 
-## 三个插件与 22 个 Skill
+## 三个插件与 23 个 Skill
 
 ### Modeler（7）
 
@@ -28,12 +28,13 @@
 | `test-driven-development` | 用红—绿—重构实现可测行为 |
 | `verification-before-completion` | 在完成声明前运行新鲜验证 |
 
-### Writer（8）
+### Writer（9）
 
 | Skill | 用途 |
 |---|---|
 | `mathmodel-writing` | 撰写并排版数学建模论文 |
-| `mathmodel-writing-grill` | 压力测试论文论证和证据映射 |
+| `mathmodel-writing-grill` | 在计划与成稿门禁分别执行用户强制十问 |
+| `mathmodel-humanizer-zh` | 在正文起草与成稿润色中保护证据并改善中文学术表达 |
 | `mathmodel-verification` | 验收论文、代码、引用和最终文件 |
 | `export-math-docx` | 导出含 Word 原生 OMML 公式的 DOCX |
 | `paper-lookup` | 通过学术 API 检索论文并保存来源 |
@@ -58,7 +59,7 @@
 
 ## 安装与依赖
 
-推荐用 Codex 的 `$skill-installer` 从本仓库 `main` 分支安装所需的完整 Skill 目录；升级时先备份并替换同名目录，安装后开启新任务使发现缓存刷新。三个插件 manifest 用于仓库分组和版本治理；不支持插件命令的 Codex CLI 仍可逐个安装 22 个 Skill。
+推荐用 Codex 的 `$skill-installer` 从本仓库 `main` 分支安装所需的完整 Skill 目录；升级时先备份并替换同名目录，安装后开启新任务使发现缓存刷新。三个插件 manifest 用于仓库分组和版本治理；不支持插件命令的 Codex CLI 仍可逐个安装 23 个 Skill。
 
 需要一次性准备常用 Python 依赖时，可在项目虚拟环境中运行 `python -m pip install -r requirements.txt`；具体题目仍应只安装实际需要的可选包。
 
@@ -80,8 +81,10 @@
   → mathmodel-analysis
   → mathmodel-coding
   → 结果冻结
-  → mathmodel-writing
-  → mathmodel-writing-grill
+  → mathmodel-writing-grill（内容计划用户强制十问）
+  → mathmodel-writing + mathmodel-humanizer-zh（中文正文起草）
+  → mathmodel-writing-grill（完整成稿用户强制十问）
+  → mathmodel-humanizer-zh（中文成稿润色）
   → mathmodel-verification
   → 最终 PDF 或 DOCX
 ```

@@ -30,13 +30,18 @@ class SchemaAndReleaseContracts(unittest.TestCase):
 
     def test_release_manifest_pins_plugins_schemas_and_evaluation(self) -> None:
         release = json.loads((ROOT / "RELEASE_MANIFEST.json").read_text(encoding="utf-8"))
-        self.assertEqual(release["release"], "2.0.0")
+        self.assertEqual(release["release"], "2.1.0")
         self.assertEqual(
             release["plugins"],
-            {"modeler": "2.0.0", "coder": "2.0.0", "writer": "2.0.0"},
+            {"modeler": "2.0.0", "coder": "2.0.0", "writer": "2.1.0"},
         )
         self.assertEqual(set(release["schemas"].values()), {"1.0"})
         self.assertIn("evaluation_baseline", release)
+        self.assertEqual(release["evaluation_baseline"], "evals/baselines/2.1.0.json")
+        baseline_path = ROOT / release["evaluation_baseline"]
+        self.assertTrue(baseline_path.is_file())
+        baseline = json.loads(baseline_path.read_text(encoding="utf-8"))
+        self.assertEqual(baseline["required_cases"], 11)
         self.assertIn("rollback_target", release)
 
     def test_evaluation_layout_separates_public_and_holdout_material(self) -> None:

@@ -92,7 +92,7 @@ G6 DELIVERY_VERIFIED
 | G2 | `$mathmodel-analysis`，按需配合统计/实验/不确定性 Skill | 方法、假设、约束和验证方案已形成且风险已记录 |
 | G3 | `$mathmodel-coding` | 可复现代码、检查结果和运行记录 |
 | G4 | Runtime | `results/results_manifest.json` 中的必需结果已冻结且 fresh |
-| G5 | `$mathmodel-writing` 与 `$mathmodel-writing-grill` | `reports/paper_evidence_map.json` 完整 |
+| G5 | `$mathmodel-writing`、两次 `$mathmodel-writing-grill` 用户十问，中文论文在正文起草和成稿润色阶段各调用一次 `$mathmodel-humanizer-zh` | 两个论文门禁各有 10 个用户回答；`reports/paper_evidence_map.json` 完整；中文写作的两种模式均有记录，成稿保护检查通过或记录显式跳过 |
 | G6 | `$mathmodel-verification` | `reports/verification.json` 为 pass |
 
 不得仅根据聊天记忆宣称 Gate 已通过。Gate 必须由验证器输出结构化结果，并写入 `gate_history.jsonl`。
@@ -104,9 +104,10 @@ G6 DELIVERY_VERIFIED
 3. **编码**：调用 `$mathmodel-coding`，读取模型清单并输出结果清单。
 4. **图示**：仅在关系、步骤或结构确实需要可视化时调用 `$mathmodel-drawio`；数据图由编码阶段生成。
 5. **冻结结果**：记录代码、数据、配置和环境指纹。只有 lifecycle=`frozen` 且 validity=`fresh` 的必需结果才能用于论文。
-6. **写作**：调用 `$mathmodel-writing`，关键数字只引用结果清单，关键结论写入证据映射。
-7. **Word 导出**：仅 Word/DOCX 路线调用 `$export-math-docx`。
-8. **验收**：调用 `$mathmodel-verification`；未通过 G6 不得声称可提交。
+6. **写作**：调用 `$mathmodel-writing`，关键数字只引用结果清单，关键结论写入证据映射；内容计划形成后由 `$mathmodel-writing-grill` 向用户提出恰好 10 题并等待逐题回答。门禁完成后，中文论文调用 `$mathmodel-humanizer-zh` 的正文起草模式，再生成各章节。
+7. **成稿用户十问与中文润色**：完整论文再次调用 `$mathmodel-writing-grill`，向用户提出另一组恰好 10 题并等待全部回答；中文论文随后第二次调用 `$mathmodel-humanizer-zh` 的成稿润色模式。任何门禁不得由 Agent 自问自答或内部通过。
+8. **重新生成交付物**：重新编译 Typst/LaTeX；Word/DOCX 路线调用 `$export-math-docx`。
+9. **验收**：调用 `$mathmodel-verification`；未通过 G6 不得声称可提交。
 
 每完成一个阶段，同步更新 `todo.md` 和工作流状态。阶段失败时保留诊断证据，不伪造缺失产物。
 

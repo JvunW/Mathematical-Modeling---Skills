@@ -29,6 +29,8 @@
 | 任务 | 使用的 Skill | 你要完成的工作 |
 | --- | --- | --- |
 | 数学建模论文撰写 | `$mathmodel-writing` | 选择模板、组织章节、插入真实结果和文献 |
+| 论文用户决策十问 | `$mathmodel-writing-grill` | 在内容计划和正文成稿两个门禁分别向用户提出恰好 10 题并等待逐题回答 |
+| 中文正文写作与成稿润色 | `$mathmodel-humanizer-zh` | 在正文起草和成稿润色两个阶段改善中文表达，并保护数字、公式、引用和结论边界 |
 | 学术文献检索 | `$paper-lookup` | 使用结构化学术数据库检索、核验并保存可复现来源 |
 | 系统性文献综述 | `$literature-review` | 设计检索、筛选、证据综合和综述结构 |
 | 引用真实性检查 | `$citation-verification` | 核验 DOI、题名、作者、年份及论点匹配度 |
@@ -43,10 +45,11 @@
 1. 核对建模报告、结果报告和图表，先建立“论点—证据—图表—引用”映射。
 2. 使用 `$paper-lookup` 检索方法来源、领域背景和参数依据；需要完整综述时再调用 `$literature-review`。
 3. 使用 `$citation-verification` 核验拟采用文献，排除不存在、信息冲突或与论点不匹配的引用。
-4. 调用 `$mathmodel-writing`，确认 Typst、LaTeX 或 Word 交付格式和比赛模板后再生成论文结构与正文。
-5. 使用 `$typst-author` 处理 Typst；LaTeX 项目遵循对应模板和编译器要求；Word 项目调用 `$export-math-docx` 生成并验证原生 OMML 公式。
-6. 编译 PDF 或渲染 DOCX。可以渲染页面时，应逐页检查裁切、重叠、缺字、空白页、公式换行和图表可读性。
-7. 调用 `$mathmodel-verification` 完成最终验收，生成 `reports/VERIFY_REPORT.md`；Word 交付还应保留 `$export-math-docx` 的 JSON 验证报告。
+4. 调用 `$mathmodel-writing`；内容计划形成后由 `$mathmodel-writing-grill` 向用户提出第一组恰好 10 题，未全部回答前不开始正文。正文完成后再提出第二组恰好 10 题，未全部回答前不润色或交付。禁止 Agent 自问自答。
+5. 中文论文在内容计划门禁后调用 `$mathmodel-humanizer-zh` 的正文起草模式，并在全部章节中持续遵守；完成正文成稿门禁后再次调用其成稿润色模式，只修改源文件、运行保护比较器并生成 `reports/HUMANIZATION_REPORT.md`。英文论文跳过两次调用。
+6. 使用 `$typst-author` 处理 Typst；LaTeX 项目遵循对应模板和编译器要求；Word 项目调用 `$export-math-docx` 生成并验证原生 OMML 公式。
+7. 编译 PDF 或渲染 DOCX。可以渲染页面时，应逐页检查裁切、重叠、缺字、空白页、公式换行和图表可读性。
+8. 调用 `$mathmodel-verification` 完成最终验收，生成 `reports/VERIFY_REPORT.md`；Word 交付还应保留 `$export-math-docx` 的 JSON 验证报告。
 
 ## 文献检索与引用要求
 
@@ -60,6 +63,8 @@
 - `reports/LITERATURE_REPORT.md`：文献筛选、核验和论点映射；
 - `paper/`：完整 Typst 或 LaTeX 论文源文件和参考文献文件；
 - `reports/PAPER_CONTENT_PLAN.md`：逐问论点、证据和章节映射；
+- `reports/PAPER_GRILL_REPORT.md`：论证计划与正文成稿两个门禁各 10 个用户问题及实际回答；
+- `reports/HUMANIZATION_REPORT.md`：中文论文执行语言润色时的范围、保护检查与风险记录；
 - 编译成功的最终 PDF，或无法编译时的明确原因；
 - 比赛要求 Word 时，提供包含原生 OMML 公式的最终 DOCX 和结构验证报告；
 - `reports/VERIFY_REPORT.md`：最终检查结论、修复项和未通过项。
@@ -71,6 +76,7 @@
 - 所有数值和图表均来自 `RESULTS_REPORT.md` 或真实结果文件；
 - 图表编号、标题、引用和正文描述一致；
 - 引用真实存在，并且确实支持相邻论点；
+- 中文论文已记录正文起草与成稿润色两次调用，且没有改变数字、单位、公式、引用、结论强度、局限或 AI 使用披露；
 - 没有占位符、内部工作流说明、绝对路径或密钥；
 - PDF 已成功编译，页面没有裁切、遮挡、缺字或异常空白。
 - Word 交付中的数学公式是原生 OMML，不是图片、MathML 或残留 `$...$` 文本，并且已完成可用工具范围内的视觉检查。
@@ -83,6 +89,10 @@
 
 ```text
 请使用 $mathmodel-verification 检查论文的数值一致性、引用真实性、公式、图表和最终 PDF，并生成 reports/VERIFY_REPORT.md。
+```
+
+```text
+请使用 $mathmodel-humanizer-zh 在正文起草阶段指导这份中文数学建模论文，并在完整成稿后再次进行保护式润色；保持数字、公式、引用和结论边界不变，并生成保护检查报告。
 ```
 
 ```text

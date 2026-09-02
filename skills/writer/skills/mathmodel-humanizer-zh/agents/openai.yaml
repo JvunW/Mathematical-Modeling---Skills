@@ -1,0 +1,4 @@
+interface:
+  display_name: "数学建模 · 中文学术润色"
+  short_description: "在正文起草和成稿润色中保护证据并改善中文表达"
+  default_prompt: "Use $mathmodel-humanizer-zh while drafting and again while polishing this Chinese mathematical-modeling paper without changing its evidence, equations, numbers, or citations."

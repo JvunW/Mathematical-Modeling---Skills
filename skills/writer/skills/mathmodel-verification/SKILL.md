@@ -17,6 +17,8 @@ description: "验收数学建模论文及配套产物。用于提交前检查 Ty
 - `reports/model_manifest.json`；
 - `results/results_manifest.json`；
 - `reports/paper_evidence_map.json`；
+- `reports/PAPER_GRILL_REPORT.md`；
+- 中文论文执行语言润色时的 `reports/HUMANIZATION_REPORT.md` 及保护检查 JSON；
 - `state/artifact_registry.json`。
 
 输出 `reports/VERIFY_REPORT.md` 和符合 `schemas/verification_report.schema.json` 的 `reports/verification.json`。机器报告必须区分 `pass`、`fail`、`warning`、`skipped` 和 `blocked`；工具缺失不能记作通过。
@@ -31,13 +33,15 @@ description: "验收数学建模论文及配套产物。用于提交前检查 Ty
    ```
 
    根据实际入口、章节、引用、图表和结果路径传参。Word 路线直接检查 Markdown，再调用 `$export-math-docx` 的结构验证。
-3. **核对内容覆盖。** 题目有几问就验收几问。每问至少有模型/算法、真实结果、解释和适合题型的验证或边界。检查 `reports/PAPER_CONTENT_PLAN.md` 中的证据缺口是否已处理。
-4. **核对数字与证据。** 目标值、误差、排名、权重、阈值和敏感性结论应与 frozen/fresh 结果一致；公式、正文、表格和图中的同一指标应一致。
-5. **核对公式。** 检查编号、标签、引用和豁免；检查公式后是否解释变量与单位。
-6. **核对图表与引用。** 所有路径存在、媒体已嵌入、caption 合理、正文有解释；引文对应真实且已核验的条目。
-7. **编译或导出。** 仅在工具可用时执行；修复语法、路径、图片和交叉引用后重跑。Word 必须通过 `$export-math-docx` 的 OMML、编号和图片嵌入检查。
-8. **逐页视觉检查。** PDF 可用本 Skill 的渲染脚本；DOCX 使用当前环境可用的 Word/LibreOffice/文档渲染器。检查裁切、重叠、缺字、越界、空页、模板破坏和编号位置。
-9. **写报告并定 Gate。** 所有硬错误清零后才可 `PASS`；未执行的必要检查保持 `skipped`/`blocked` 并说明原因。
+3. **核对论文用户十问。** 确认 `PAPER_GRILL_REPORT.md` 中论证计划门禁和正文成稿门禁各有恰好 10 个展示给用户的问题及其显式回答；缺答、Agent 代答、默认答案整体接受或内部自检记录都不能算通过。
+4. **核对语言润色证据。** 中文论文存在 `HUMANIZATION_REPORT.md` 时，确认正文起草模式和成稿润色模式均有执行记录，每个成稿阶段已改源文件的保护比较为 `pass`，润色后已重新编译/导出，且 AI 使用披露仍真实完整。用户明确跳过某一模式时只记录，不强制补做。
+5. **核对内容覆盖。** 题目有几问就验收几问。每问至少有模型/算法、真实结果、解释和适合题型的验证或边界。检查 `reports/PAPER_CONTENT_PLAN.md` 中的证据缺口是否已处理。
+6. **核对数字与证据。** 目标值、误差、排名、权重、阈值和敏感性结论应与 frozen/fresh 结果一致；公式、正文、表格和图中的同一指标应一致。
+7. **核对公式。** 检查编号、标签、引用和豁免；检查公式后是否解释变量与单位。
+8. **核对图表与引用。** 所有路径存在、媒体已嵌入、caption 合理、正文有解释；引文对应真实且已核验的条目。
+9. **编译或导出。** 仅在工具可用时执行；修复语法、路径、图片和交叉引用后重跑。Word 必须通过 `$export-math-docx` 的 OMML、编号和图片嵌入检查。
+10. **逐页视觉检查。** PDF 可用本 Skill 的渲染脚本；DOCX 使用当前环境可用的 Word/LibreOffice/文档渲染器。检查裁切、重叠、缺字、越界、空页、模板破坏和编号位置。
+11. **写报告并定 Gate。** 所有硬错误清零后才可 `PASS`；未执行的必要检查保持 `skipped`/`blocked` 并说明原因。
 
 ## 三条交付路线
 
@@ -76,9 +80,12 @@ python "<SKILL_DIR>/scripts/render_pdf_pages.py" "<OUTPUT_PDF>" --output-dir "<T
 - 缺少核心源文件、正文或最终交付物；
 - 入口引用的章节/图片不存在，或模板示例和占位符仍残留；
 - 关键数字与当前结果冲突，或证据 Artifact 不是 frozen/fresh；
+- 任一论文门禁没有恰好 10 个用户显式回答，问题未展示给用户，或记录包含 Agent 代答、默认答案整体接受；
 - 公式编号、标签或引用不闭合，未经审计地使用不编号展示公式；
 - Word 的 OMML、编号连续性、图片嵌入或包结构验证失败；
 - 引用无法对应真实条目；
+- 中文论文缺少正文起草或成稿润色模式记录且无用户显式跳过、成稿保护检查失败、检查报告与最终源文件不对应，或润色后未重新生成交付物；
+- 语言润色删除、弱化或伪造比赛要求的 AI 使用披露；
 - 编译器可用但编译失败；
 - 页面存在影响阅读或提交的裁切、重叠、越界、乱码、缺页；
 - 正文泄露内部工作流、临时路径或调试信息。
@@ -89,7 +96,7 @@ python "<SKILL_DIR>/scripts/render_pdf_pages.py" "<OUTPUT_PDF>" --output-dir "<T
 
 ## 报告最小结构
 
-`VERIFY_REPORT.md` 至少包含结论、检查项表、结构、公式、图表、数值一致性、引用、复现、编译/导出、视觉检查和未解决问题。`verification.json` 同时记录每项状态、证据路径、消息、时间和适用 waiver。
+`VERIFY_REPORT.md` 至少包含结论、检查项表、结构、两个论文门禁的用户十问证据、中文润色保护证据（适用时）、公式、图表、数值一致性、引用、复现、编译/导出、视觉检查和未解决问题。`verification.json` 同时记录每项状态、证据路径、消息、时间和适用 waiver。
 
 ## 完成标准
 

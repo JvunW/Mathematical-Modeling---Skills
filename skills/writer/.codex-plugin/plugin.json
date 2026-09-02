@@ -1,7 +1,7 @@
 {
   "name": "writer",
-  "version": "2.0.0",
-  "description": "OpenAlex-backed research, paper writing, native OMML DOCX export, and submission checks.",
+  "version": "2.1.0",
+  "description": "OpenAlex-backed research, evidence-preserving paper writing, Chinese academic drafting and polishing, native OMML DOCX export, and submission checks.",
   "author": {
     "name": "MathModelAgent contributors"
   },
@@ -13,13 +13,15 @@
     "pandoc",
     "docx",
     "omml",
-    "citations"
+    "citations",
+    "chinese-academic-writing",
+    "humanization"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "MathModel Writer",
-    "shortDescription": "Research, write, typeset, and verify papers",
-    "longDescription": "Search and verify scholarly literature, synthesize evidence, write mathematical modeling papers, export LaTeX math as native Word OMML, and check citations, numerical consistency, and final document quality.",
+    "shortDescription": "Research, write, polish, typeset, and verify papers",
+    "longDescription": "Search and verify scholarly literature, synthesize evidence, write mathematical modeling papers, polish Chinese academic prose without changing protected evidence, export LaTeX math as native Word OMML, and check citations, numerical consistency, and final document quality.",
     "developerName": "MathModelAgent contributors",
     "category": "Productivity",
     "capabilities": [
@@ -29,6 +31,8 @@
     ],
     "defaultPrompt": [
       "Use $mathmodel-writing to write a paper from my verified results with OpenAlex references.",
+      "Use $mathmodel-writing-grill to ask me exactly 10 required questions at each paper-writing gate and wait for every answer.",
+      "Use $mathmodel-humanizer-zh while drafting and again while polishing a Chinese modeling paper without changing its numbers, equations, or citations.",
       "Use $paper-lookup to find and preserve provenance for relevant scholarly sources.",
       "Use $export-math-docx to export LaTeX math as native OMML equations in Word."
     ]

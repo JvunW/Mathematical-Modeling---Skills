@@ -73,6 +73,7 @@ class RepositoryContracts(unittest.TestCase):
             "skills/modeler/skills/uncertainty-and-units/SKILL.md": 210,
             "skills/coder/skills/test-driven-development/SKILL.md": 190,
             "skills/writer/skills/mathmodel-verification/SKILL.md": 220,
+            "skills/writer/skills/mathmodel-humanizer-zh/SKILL.md": 180,
             "skills/coder/skills/systematic-debugging/SKILL.md": 190,
             "skills/writer/skills/paper-lookup/SKILL.md": 190,
         }
@@ -112,6 +113,7 @@ class RepositoryContracts(unittest.TestCase):
     def test_plugin_manifests_match_discovered_skills(self) -> None:
         manifests = sorted(SKILLS_ROOT.glob("*/.codex-plugin/plugin.json"))
         self.assertEqual(len(manifests), 3)
+        release = json.loads((ROOT / "RELEASE_MANIFEST.json").read_text(encoding="utf-8"))
         discovered_by_role = {
             role.name: len(list((role / "skills").glob("*/SKILL.md")))
             for role in SKILLS_ROOT.iterdir()
@@ -123,14 +125,15 @@ class RepositoryContracts(unittest.TestCase):
             role = manifest.parents[1].name
             self.assertEqual(data["name"], role)
             self.assertEqual(data["skills"], "./skills/")
-            self.assertRegex(data["version"], r"^2\.0\.0(?:\+codex\..+)?$")
+            self.assertRegex(data["version"], r"^\d+\.\d+\.\d+(?:\+codex\..+)?$")
+            self.assertEqual(data["version"], release["plugins"][role])
             total += discovered_by_role[role]
-        self.assertEqual(total, 22)
+        self.assertEqual(total, 23)
 
     def test_readme_documents_validation_delivery_and_recovery(self) -> None:
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         for heading in (
-            "## 三个插件与 22 个 Skill",
+            "## 三个插件与 23 个 Skill",
             "## Typst、LaTeX 与 Word 三种交付路线",
             "## 验证仓库",
             "## 状态恢复与结果追溯",

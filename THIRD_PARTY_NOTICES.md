@@ -50,6 +50,20 @@ Source: <https://github.com/typst/typst>
 The `typst-author/references/typst-docs/` directory contains documentation derived from the Typst project.  
 Upstream license: Apache License 2.0.
 
+## humanizer-zh
+
+Source: <https://github.com/ai-zixun/humanizer-zh>
+
+Included or adapted skill:
+
+- `mathmodel-humanizer-zh`
+
+Pinned upstream release: `v1.3.0` (`0ba21f7`).
+Upstream license: MIT.
+Copyright notice reported by upstream: Copyright (c) 2026 aizixun.
+
+The local adaptation keeps neutral Chinese prose guidance for both initial drafting and final polishing while adding mathematical-paper evidence protection, academic-integrity boundaries, and a deterministic protected-content checker. Author-voice profiles, named-author imitation, blog/newsletter corpus routing, and AI-detection-evasion claims are not included.
+
 ## License preservation
 
 Redistributors must preserve the copyright notices and license terms required by each upstream project. Complete license texts are included in [`licenses/MIT.txt`](licenses/MIT.txt) and [`licenses/Apache-2.0.txt`](licenses/Apache-2.0.txt). This notice does not change the license of original MathModel Skills content.

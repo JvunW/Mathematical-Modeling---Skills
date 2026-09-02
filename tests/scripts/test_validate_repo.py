@@ -33,7 +33,7 @@ class ValidateRepoTests(unittest.TestCase):
             self.assertEqual(completed.returncode, 0, completed.stdout + completed.stderr)
             data = json.loads(report.read_text(encoding="utf-8"))
             self.assertEqual(data["status"], "pass")
-            self.assertEqual(data["skill_count"], 22)
+            self.assertEqual(data["skill_count"], 23)
             self.assertEqual(data["plugin_count"], 3)
             self.assertGreater(data["python_file_count"], 0)
 

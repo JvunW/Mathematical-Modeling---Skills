@@ -1,4 +1,15 @@
-# Migration to 2.0.0
+# Release migration notes
+
+## 2.1.0 additive update
+
+- The Writer plugin adds `mathmodel-humanizer-zh` for evidence-preserving Chinese academic drafting and final polishing.
+- `mathmodel-writing-grill` now runs an exact 10-question user decision interview at each of its two gates; Agent self-review, default answers, and fewer-question shortcuts are no longer accepted.
+- Chinese papers call this Skill in two modes: once after the content-plan grill to guide drafting, and again after the completed-draft grill before compilation or DOCX export.
+- The new protected-content checker compares numbers, mathematical spans, citations, labels, image paths, commands, and code before and after editing.
+- No schema migration is required. Existing projects can skip this optional language stage or add `reports/HUMANIZATION_REPORT.md` when it is used.
+- Writer 2.1.0 remains compatible with Modeler 2.0.0 and Coder 2.0.0.
+
+## Migration to 2.0.0
 
 ## Breaking changes
 
