@@ -1,0 +1,14 @@
+% Requires: \usetikzlibrary{positioning,arrows.meta}
+\begin{scope}[
+  block/.style={draw=black!50, fill=black!4, rounded corners=2pt,
+    minimum width=2.4cm, minimum height=0.8cm, font=\footnotesize, align=center},
+  flow/.style={-{Latex[length=1.8mm,width=1.3mm]}, line width=0.7pt, draw=black!65}
+]
+  \node[block, fill=blue!8] (feedbackState) {Current state $x_t$};
+  \node[block, right=1.15cm of feedbackState, fill=orange!10] (feedbackUpdate) {Update $g(x_t)$};
+  \draw[flow] (feedbackState) -- node[above, font=\scriptsize] {evaluate} (feedbackUpdate);
+  \draw[flow, dashed, draw=blue!65!black]
+    (feedbackUpdate.south) .. controls +(0,-0.95) and +(0,-0.95) ..
+    node[below, font=\scriptsize, text=blue!65!black] {repeat until stopping rule}
+    (feedbackState.south);
+\end{scope}

@@ -102,7 +102,7 @@ G6 DELIVERY_VERIFIED
 1. **用户思路采集**：题目上传后先调用 `$mathmodel-analysis-grill`，提出恰好 10 个问题并等待用户逐题回答。
 2. **分析**：十问完成后调用 `$mathmodel-analysis`，使用用户回答形成模型清单。
 3. **编码**：调用 `$mathmodel-coding`，读取模型清单并输出结果清单。
-4. **图示**：仅在关系、步骤或结构确实需要可视化时调用 `$mathmodel-drawio`；数据图由编码阶段生成。
+4. **图示**：图确实服务论证时调用 `$mathmodel-figure-templates`，先冻结 Figure Contract，再在 TikZ、Matplotlib、DrawIO 或 Mermaid 中路由；数据图必须来自编码阶段的真实结果，DrawIO 执行仍交给 `$mathmodel-drawio`。
 5. **冻结结果**：记录代码、数据、配置和环境指纹。只有 lifecycle=`frozen` 且 validity=`fresh` 的必需结果才能用于论文。
 6. **写作**：调用 `$mathmodel-writing`，关键数字只引用结果清单，关键结论写入证据映射；内容计划形成后由 `$mathmodel-writing-grill` 向用户提出恰好 10 题并等待逐题回答。门禁完成后，中文论文调用 `$mathmodel-humanizer-zh` 的正文起草模式，再生成各章节。
 7. **成稿用户十问与中文润色**：完整论文再次调用 `$mathmodel-writing-grill`，向用户提出另一组恰好 10 题并等待全部回答；中文论文随后第二次调用 `$mathmodel-humanizer-zh` 的成稿润色模式。任何门禁不得由 Agent 自问自答或内部通过。

@@ -28,6 +28,7 @@ networkx
 
 opencv-python
 Pillow
+PyMuPDF
 scikit-image
 
 tqdm

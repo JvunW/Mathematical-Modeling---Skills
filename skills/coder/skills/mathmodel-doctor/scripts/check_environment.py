@@ -20,6 +20,7 @@ COMMANDS = {
     "pdftoppm": ("pdftoppm",),
     "mutool": ("mutool",),
     "magick": ("magick",),
+    "mmdc": ("mmdc",),
 }
 
 PACKAGES = {
@@ -35,6 +36,9 @@ PACKAGES = {
     "pint": "pint",
     "uncertainties": "uncertainties",
     "requests": "requests",
+    "PIL": "Pillow",
+    "fitz": "PyMuPDF",
+    "skimage": "scikit-image",
 }
 
 CORE_PACKAGES = {"numpy", "pandas", "matplotlib"}
@@ -92,6 +96,9 @@ def build_report() -> dict:
             "numerical_modeling": python_ok and core_packages_ok,
             "paper_compilation": compiler_ok,
             "drawio_pdf_export": bool(commands["drawio"]["installed"]),
+            "tikz_figure_compilation": bool(commands["xelatex"]["installed"] and commands["pdftoppm"]["installed"]),
+            "pdf_geometry_qa": bool(packages["fitz"]["installed"]),
+            "mermaid_rendering": bool(commands["mmdc"]["installed"]),
             "pdf_visual_rendering": rasterizer_ok,
             "openalex_api_access": python_ok and openalex_key_configured,
         },

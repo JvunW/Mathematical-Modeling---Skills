@@ -23,7 +23,7 @@
 | `mathmodel-coding` | 实现模型、运行求解、保存结果和数据图 |
 | `mathmodel-doctor` | 检查建模、排版和外部工具环境 |
 | `mathmodel-drawio` | 绘制确有必要的路线图和结构图 |
-| `mathmodel-figure-templates` | 复用科研图表模板 |
+| `mathmodel-figure-templates` | 路由 TikZ/Matplotlib/DrawIO/Mermaid，引入 Nature 等风格并执行 Figure QA |
 | `systematic-debugging` | 复现问题并定位根因 |
 | `test-driven-development` | 用红—绿—重构实现可测行为 |
 | `verification-before-completion` | 在完成声明前运行新鲜验证 |

@@ -5,7 +5,7 @@ description: "绘制数学建模论文所需的非数据型图示。用于根据
 
 # DrawIO 非数据图示绘制
 
-本 skill 通常承接 `$mathmodel-coding`。它只负责论文中的**非数据型图示**，例如技术路线图、求解流程图、模型结构图、数据处理流程图、变量关系图、指标体系图等。
+本 skill 通常由 `$mathmodel-figure-templates` 的引擎路由承接 `$mathmodel-coding`。它只负责论文中的**非数据型 DrawIO 图示**，例如技术路线图、求解流程图、模型结构图、数据处理流程图、变量关系图、指标体系图等；风格 profile 与跨引擎 Figure QA 仍由 `$mathmodel-figure-templates` 统一约束。
 
 ## 数学建模规范参考
 

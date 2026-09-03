@@ -21,9 +21,9 @@ python "<SKILL_DIR>/scripts/check_environment.py"
 
 - Python 版本（完整脚本集要求 3.11+）。
 - 论文编译器：Typst、XeLaTeX（至少一个即可）。
-- 图形工具：Draw.io、Poppler、MuPDF、ImageMagick。
+- 图形工具：Draw.io、XeLaTeX、Poppler、MuPDF、ImageMagick、Mermaid CLI。
 - 核心 Python 包：NumPy、pandas、matplotlib。
-- 扩展包：SciPy、scikit-learn、openpyxl、seaborn、pingouin、statsmodels、pint、uncertainties、requests。
+- 扩展包：SciPy、scikit-learn、openpyxl、seaborn、pingouin、statsmodels、pint、uncertainties、requests、Pillow、PyMuPDF、scikit-image。
 
 OpenAlex 检索脚本使用 Python 标准库，不要求 `requests`。OpenAlex 自 2026 年 2 月 13 日起要求所有 API 请求携带免费 API Key；检查器只报告 `OPENALEX_API_KEY` 是否已配置，绝不显示密钥值。
 
@@ -34,6 +34,8 @@ OpenAlex 检索脚本使用 Python 标准库，不要求 `requests`。OpenAlex �
 - 只做赛题分析：通常只需要 Codex 本身。
 - 运行模型和绘图：需要 Python；NumPy、pandas、matplotlib 为通用核心包，其他包按具体模型选装。
 - 编译论文：Typst 或 XeLaTeX 至少一个。
+- 编译和预览 TikZ：需要 XeLaTeX 与 Poppler；PDF 坐标级重叠检查额外需要 PyMuPDF。
+- Mermaid 草图导出：需要 Mermaid CLI；缺失时可保留 `.mmd` 或改走 TikZ/DrawIO。
 - 导出 Draw.io PDF：需要 Draw.io Desktop CLI；缺失时仍可交付 `.drawio` 源文件。
 - PDF 逐页视觉检查：Poppler、MuPDF 或 ImageMagick 至少一个。
 - OpenAlex 文献检索：需要网络访问和 `OPENALEX_API_KEY`；缺失时只阻塞 OpenAlex，不阻塞离线建模与写作。
@@ -45,7 +47,7 @@ OpenAlex 检索脚本使用 Python 标准库，不要求 `requests`。OpenAlex �
 Python 包示例：
 
 ```text
-python -m pip install numpy pandas matplotlib scipy scikit-learn openpyxl seaborn statsmodels pint uncertainties
+python -m pip install numpy pandas matplotlib scipy scikit-learn openpyxl seaborn statsmodels pint uncertainties Pillow PyMuPDF scikit-image
 ```
 
 若用户使用 `uv`、Conda、Poetry 或容器，应改用其现有依赖管理方式。Typst、TeX 发行版、Draw.io 和 PDF 渲染工具属于系统软件，应依据当前操作系统使用官方安装渠道。

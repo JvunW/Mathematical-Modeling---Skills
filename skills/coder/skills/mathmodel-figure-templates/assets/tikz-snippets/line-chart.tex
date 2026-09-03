@@ -1,0 +1,11 @@
+% Replace coordinates with traced result data.
+\begin{scope}[font=\scriptsize]
+  \draw[black!55, line width=0.45pt] (0,0) -- (0,2.0) (0,0) -- (3.2,0);
+  \draw[black!35, dashed] (0,1.45) -- (3.2,1.45);
+  \draw[blue!65!black, line width=1.0pt]
+    plot[smooth] coordinates {(0.15,0.35) (0.75,0.82) (1.35,1.14) (1.95,1.46) (2.55,1.66) (3.05,1.76)};
+  \foreach \x/\y in {0.15/0.35,0.75/0.82,1.35/1.14,1.95/1.46,2.55/1.66,3.05/1.76}
+    \fill[blue!65!black] (\x,\y) circle (1.2pt);
+  \node[anchor=north] at (1.6,-0.12) {Iteration};
+  \node[rotate=90, anchor=south] at (-0.42,1.0) {Objective};
+\end{scope}

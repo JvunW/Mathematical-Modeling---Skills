@@ -11,8 +11,8 @@
 | [题型防错速查](#题型防错速查) | `$mathmodel-analysis` `$mathmodel-coding` |
 | [代码实现与结果](#代码实现与结果) | `$mathmodel-coding` |
 | [编码阶段常见错误](#编码阶段常见错误) | `$mathmodel-coding` |
-| [图表与可视化](#图表与可视化) | `$mathmodel-coding` `$mathmodel-drawio` `$mathmodel-writing` |
-| [非数据图工具选择](#非数据图工具选择) | `$mathmodel-drawio` `$mathmodel-writing` |
+| [图表与可视化](#图表与可视化) | `$mathmodel-coding` `$mathmodel-figure-templates` `$mathmodel-writing` |
+| [非数据图工具选择](#非数据图工具选择) | `$mathmodel-figure-templates` `$mathmodel-drawio` `$mathmodel-writing` |
 | [论文写作](#论文写作) | `$mathmodel-writing` |
 | [论文验收与一致性](#论文验收与一致性) | `$mathmodel-verification` |
 | [模型大分类与选型速查](#模型大分类与选型速查) | `$mathmodel-analysis` |
@@ -86,6 +86,7 @@
 
 ## 图表与可视化
 
+- 先用 `$mathmodel-figure-templates` 写 Figure Contract：核心结论、证据来源、读者路径、Hero 或无 Hero、辅助 Panel 的独有信息、目标载体和可删项。不得先选模板再反推结论。
 - 图表要服务论证，不为凑数量而画。每张图应能回答一个明确问题：趋势、分布、对比、关系、结构或流程。
 - 数据图常见选择：趋势用折线图，排名用条形/棒棒糖图，分布用箱线/小提琴/直方图，关系用散点/热力图，模型对比用分组柱状图或指标矩阵。
 - 非数据图常见选择：技术路线图、数据处理流程图、子问题求解流程图、变量关系图、模型结构图、指标体系图。
@@ -94,6 +95,7 @@
 
 ## 非数据图工具选择
 
+- 统一由 `$mathmodel-figure-templates` 在引擎层路由，并应用 Nature/Science/IEEE/MCM/CUMCM 风格层和 Figure QA；具体 DrawIO 文件仍由 `$mathmodel-drawio` 生成。
 - DrawIO 适合技术路线图、子问题求解流程图、数据处理 Pipeline、指标体系层次图、模型选择决策树、甘特图、小规模网络拓扑和简单概念框架。
 - TikZ 适合需要精确数学标注、公式节点、复杂连线、2D 几何、变量关系、因果路径、模型架构或自定义算法流程的图。
 - Matplotlib/networkx 适合节点较多、需要由数据驱动布局或需要标注最优路径/权重的网络图。

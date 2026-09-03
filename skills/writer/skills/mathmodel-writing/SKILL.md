@@ -9,7 +9,7 @@ description: "撰写并排版数学建模论文，支持 Typst、LaTeX 和用于
 
 ## 触发边界
 
-用于论文内容规划、正文撰写、图表叙事、公式与引用排版、摘要和结论。若模型尚未定稿，先用 `$mathmodel-analysis`；若结果尚未计算或冻结，先用 `$mathmodel-coding`；只需最终验收时用 `$mathmodel-verification`。
+用于论文内容规划、正文撰写、图表叙事、公式与引用排版、摘要和结论。若模型尚未定稿，先用 `$mathmodel-analysis`；若结果尚未计算或冻结，先用 `$mathmodel-coding`；需要新建 TikZ、Nature 风格、多 Panel 图或补做 Figure QA 时用 `$mathmodel-figure-templates`；只需最终验收时用 `$mathmodel-verification`。
 
 ## 输入契约
 

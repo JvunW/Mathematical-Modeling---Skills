@@ -1,0 +1,15 @@
+% Restrained semantic zones; adapt labels, not the meaning of the colors.
+\begin{scope}[font=\scriptsize]
+  \fill[blue!6, rounded corners=2pt] (0,0) rectangle (2.8,1.25);
+  \fill[orange!7, rounded corners=2pt] (3.1,0) rectangle (5.9,1.25);
+  \fill[green!7, rounded corners=2pt] (6.2,0) rectangle (9.0,1.25);
+  \draw[blue!45] (0,0) rectangle (2.8,1.25);
+  \draw[orange!50] (3.1,0) rectangle (5.9,1.25);
+  \draw[green!45!black] (6.2,0) rectangle (9.0,1.25);
+  \node[font=\footnotesize\bfseries] at (1.4,0.78) {Observed};
+  \node[text=black!60] at (1.4,0.42) {data and assumptions};
+  \node[font=\footnotesize\bfseries] at (4.5,0.78) {Decided};
+  \node[text=black!60] at (4.5,0.42) {model and parameters};
+  \node[font=\footnotesize\bfseries] at (7.6,0.78) {Verified};
+  \node[text=black!60] at (7.6,0.42) {results and checks};
+\end{scope}

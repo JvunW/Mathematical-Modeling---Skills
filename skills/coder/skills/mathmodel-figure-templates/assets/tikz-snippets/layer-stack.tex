@@ -1,0 +1,8 @@
+\begin{scope}[font=\scriptsize]
+  \foreach \index/\shade/\label in {0/6/Layer 1,1/10/Layer 2,2/14/Layer 3,3/20/Layer $L$} {
+    \path[draw=black!45, fill=blue!\shade, rounded corners=1.5pt, line width=0.45pt]
+      (0.15*\index,0.18*\index) rectangle ++(2.4,0.72);
+    \node at (1.2+0.15*\index,0.36+0.18*\index) {\label};
+  }
+  \node[anchor=west, text=black!55] at (3.05,0.62) {$\times L$ shared structure};
+\end{scope}

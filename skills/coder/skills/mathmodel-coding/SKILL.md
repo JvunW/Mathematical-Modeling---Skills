@@ -387,6 +387,7 @@ def draw_three_dimensional_response_surface(
 - 新功能或缺陷修复：优先先写失败测试，再实现修复；
 - 流程图和架构图：交给 Draw.io 相关 skill；
 - 论文正文和排版：交给数学建模写作相关 skill；
+- TikZ、Nature/Science/IEEE/MCM/CUMCM 风格、多 Panel 组合与 Figure QA：交给 `$mathmodel-figure-templates`；本 skill 仍负责提供真实图表数据和可复现绘图入口；
 - 最终交付：运行验证相关 skill，并把最新测试证据写入报告。
 
 编程手的最终判断标准是：代码能运行，结果有来源，约束已检查，图表可复现，命名和注释便于下一位成员接手。

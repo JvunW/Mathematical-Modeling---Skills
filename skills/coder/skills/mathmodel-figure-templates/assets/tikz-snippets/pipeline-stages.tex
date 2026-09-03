@@ -1,0 +1,14 @@
+% Requires: \usetikzlibrary{positioning,arrows.meta}
+\begin{scope}[
+  stage/.style={draw=black!45, fill=black!4, rounded corners=2pt,
+    minimum width=2.25cm, minimum height=0.85cm, align=center, font=\footnotesize},
+  flow/.style={-{Latex[length=1.8mm,width=1.3mm]}, line width=0.7pt, draw=black!65}
+]
+  \node[stage, fill=blue!9] (stageInput) {Input\\\scriptsize observed data};
+  \node[stage, right=0.72cm of stageInput] (stageClean) {Transform\\\scriptsize auditable rules};
+  \node[stage, right=0.72cm of stageClean, fill=orange!11] (stageModel) {Model\\\scriptsize constraints};
+  \node[stage, right=0.72cm of stageModel, fill=green!10] (stageResult) {Evidence\\\scriptsize result + check};
+  \draw[flow] (stageInput) -- (stageClean);
+  \draw[flow] (stageClean) -- (stageModel);
+  \draw[flow] (stageModel) -- (stageResult);
+\end{scope}

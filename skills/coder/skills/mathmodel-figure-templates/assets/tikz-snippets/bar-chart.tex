@@ -1,0 +1,14 @@
+% Replace heights and labels with traced result data.
+\begin{scope}[font=\scriptsize]
+  \draw[black!55, line width=0.45pt] (0,0) -- (0,2.0) (0,0) -- (3.0,0);
+  \foreach \x/\height/\label/\fillcolor in {
+    0.35/0.85/A/black!25,
+    1.10/1.25/B/black!38,
+    1.85/1.72/Ours/blue!62}
+    {
+      \fill[\fillcolor] (\x,0) rectangle ++(0.48,\height);
+      \node[anchor=north] at (\x+0.24,-0.08) {\label};
+      \node[anchor=south, text=black!70] at (\x+0.24,\height+0.04) {\height};
+    }
+  \node[rotate=90, anchor=south] at (-0.42,1.0) {Metric (unit)};
+\end{scope}
