@@ -24,8 +24,8 @@
 | --- | --- | --- |
 | 模型实现与求解 | `$mathmodel-coding` | 编码、运行、保存结果、约束检查和数据图生成 |
 | 环境与依赖诊断 | `$mathmodel-doctor` | 只读检查 Python 包、编译器和绘图工具 |
-| 科研数据图 | `$mathmodel-figure-templates` | 选择并生成可编辑、可复现的出版级图表 |
-| 流程图和结构图 | `$mathmodel-drawio` | 生成 `.drawio` 源文件并按条件导出 PDF |
+| 论文数据图与结构图 | `$mathmodel-figure-templates` | 先写 Figure Contract，再在 Matplotlib/TikZ/DrawIO/Mermaid 中路由，应用 Nature/Science/IEEE/MCM/CUMCM 风格并执行 Figure QA |
+| 可编辑流程图和架构图 | `$mathmodel-drawio` | 在 Figure System 选择 DrawIO 引擎时，生成 `.drawio` 源文件并按条件导出 PDF |
 | 错误或异常结果 | `$systematic-debugging` | 复现问题、定位根因、实施最小修复 |
 | 新功能或缺陷修复 | `$test-driven-development` | 先建立失败测试，再实现并重构 |
 | 宣布完成之前 | `$verification-before-completion` | 运行最新测试、构建和结果检查 |
@@ -39,7 +39,7 @@
 3. 调用 `$mathmodel-coding` 实现数据处理、模型、求解、验证和结果导出。
 4. 新增行为时使用测试驱动；遇到失败时使用系统调试流程，不靠反复猜改。
 5. 保存随机种子、依赖版本、参数、迭代历史、约束残差和图表数据。
-6. 使用科研图表 Skill 生成数据图；只有确有表达价值时才生成 Draw.io 流程图。
+6. 图确实服务论证时，调用 `$mathmodel-figure-templates`：先冻结 Figure Contract，数据图仅使用本阶段真实结果，再按图的语义选择 Matplotlib、TikZ、DrawIO 或 Mermaid。需要人工拖拽的可编辑流程图再交给 `$mathmodel-drawio`。
 7. 更新 `reports/RESULTS_REPORT.md`，说明方法、关键数值、校验过程和每个结果文件的用途。
 8. 调用 `$verification-before-completion` 运行最新证据检查，然后把结果交给论文手。
 
@@ -49,7 +49,7 @@
 
 - `code/`：可运行源代码、配置和必要说明；
 - `code/outputs/` 或 `results/`：真实运行产生的表格、中间数据和结果记录；
-- `figures/`：图表源数据、可编辑脚本及 PDF/SVG/PNG 输出；
+- `figures/`：图表源数据，`.py`/`.tex`/`.drawio`/`.mmd` 可编辑源文件，PDF/SVG 矢量输出与 PNG 预览，以及 Figure Contract、生成命令和 `figure-qa.json`；
 - `reports/RESULTS_REPORT.md`：方法、参数、关键结果、验证和文件索引；
 - 如生成结构图：`.drawio` 源文件及 `reports/DRAWIO_REPORT.md`；
 - 测试、构建或运行命令及其最新结果。
@@ -61,6 +61,7 @@
 - 约束、残差、误差、稳定性或敏感性已经按模型要求检查；
 - 随机过程记录了种子，关键参数和环境信息可复现；
 - 没有只保存截图而丢失图表数据或生成脚本；
+- 高级配图已保留 Figure Contract、可编辑源文件和最新 QA 结果；`pass_with_skips` 中的跳过项已向论文手说明；
 - 失败、限制和未完成项已经如实记录。
 
 ## 推荐调用示例
@@ -71,6 +72,10 @@
 
 ```text
 请使用 $systematic-debugging 定位当前结果异常的根因，修复后运行回归测试，并使用 $verification-before-completion 核验。
+```
+
+```text
+请使用 $mathmodel-figure-templates，基于 results 中的真实结果先写 Figure Contract，再生成 Nature 风格数据图或 TikZ 结构图，保留可编辑源文件并执行 Figure QA。
 ```
 
 ## 协作边界

@@ -31,6 +31,7 @@
 | 数学建模论文撰写 | `$mathmodel-writing` | 选择模板、组织章节、插入真实结果和文献 |
 | 论文用户决策十问 | `$mathmodel-writing-grill` | 在内容计划和正文成稿两个门禁分别向用户提出恰好 10 题并等待逐题回答 |
 | 中文正文写作与成稿润色 | `$mathmodel-humanizer-zh` | 在正文起草和成稿润色两个阶段改善中文表达，并保护数字、公式、引用和结论边界 |
+| 新建或重做论文配图 | `$mathmodel-figure-templates` | 需要 TikZ、Nature 风格、多 Panel 组合或补做 Figure QA 时，根据论证目标和真实结果生成可编辑图表 |
 | 学术文献检索 | `$paper-lookup` | 使用结构化学术数据库检索、核验并保存可复现来源 |
 | 系统性文献综述 | `$literature-review` | 设计检索、筛选、证据综合和综述结构 |
 | 引用真实性检查 | `$citation-verification` | 核验 DOI、题名、作者、年份及论点匹配度 |
@@ -38,18 +39,19 @@
 | Word 原生公式导出 | `$export-math-docx` | 将 Markdown/LaTeX 数学结构转换为 DOCX 原生 OMML 并进行结构验证 |
 | 最终论文验收 | `$mathmodel-verification` | 检查结构、数值、图表、引用、编译和 PDF 页面 |
 
-如果同时安装了建模手插件，可按需调用 `$mathmodel-references` 获取额外的论文与图表规范，但它不是论文手运行的前提。
+如果同时安装了建模手插件，可按需调用 `$mathmodel-references` 获取额外的论文与图表规范；新建或重做高级配图还需安装 coder 插件中的 `$mathmodel-figure-templates`。已有图表只需嵌入和叙事时，不得为了调用 Skill 而重画。
 
 ## 标准工作顺序
 
 1. 核对建模报告、结果报告和图表，先建立“论点—证据—图表—引用”映射。
-2. 使用 `$paper-lookup` 检索方法来源、领域背景和参数依据；需要完整综述时再调用 `$literature-review`。
-3. 使用 `$citation-verification` 核验拟采用文献，排除不存在、信息冲突或与论点不匹配的引用。
-4. 调用 `$mathmodel-writing`；内容计划形成后由 `$mathmodel-writing-grill` 向用户提出第一组恰好 10 题，未全部回答前不开始正文。正文完成后再提出第二组恰好 10 题，未全部回答前不润色或交付。禁止 Agent 自问自答。
-5. 中文论文在内容计划门禁后调用 `$mathmodel-humanizer-zh` 的正文起草模式，并在全部章节中持续遵守；完成正文成稿门禁后再次调用其成稿润色模式，只修改源文件、运行保护比较器并生成 `reports/HUMANIZATION_REPORT.md`。英文论文跳过两次调用。
-6. 使用 `$typst-author` 处理 Typst；LaTeX 项目遵循对应模板和编译器要求；Word 项目调用 `$export-math-docx` 生成并验证原生 OMML 公式。
-7. 编译 PDF 或渲染 DOCX。可以渲染页面时，应逐页检查裁切、重叠、缺字、空白页、公式换行和图表可读性。
-8. 调用 `$mathmodel-verification` 完成最终验收，生成 `reports/VERIFY_REPORT.md`；Word 交付还应保留 `$export-math-docx` 的 JSON 验证报告。
+2. 需要新建 TikZ、Nature 风格、多 Panel 图或补做 Figure QA 时，把核心结论、证据文件、预期布局和论文栏宽交给 `$mathmodel-figure-templates`。论文手决定“为什么画、放在哪里、图注说什么”；Figure System 负责可复现生成和单图 QA。
+3. 使用 `$paper-lookup` 检索方法来源、领域背景和参数依据；需要完整综述时再调用 `$literature-review`。
+4. 使用 `$citation-verification` 核验拟采用文献，排除不存在、信息冲突或与论点不匹配的引用。
+5. 调用 `$mathmodel-writing`；内容计划形成后由 `$mathmodel-writing-grill` 向用户提出第一组恰好 10 题，未全部回答前不开始正文。正文完成后再提出第二组恰好 10 题，未全部回答前不润色或交付。禁止 Agent 自问自答。
+6. 中文论文在内容计划门禁后调用 `$mathmodel-humanizer-zh` 的正文起草模式，并在全部章节中持续遵守；完成正文成稿门禁后再次调用其成稿润色模式，只修改源文件、运行保护比较器并生成 `reports/HUMANIZATION_REPORT.md`。英文论文跳过两次调用。
+7. 使用 `$typst-author` 处理 Typst；LaTeX 项目遵循对应模板和编译器要求；Word 项目调用 `$export-math-docx` 生成并验证原生 OMML 公式。
+8. 编译 PDF 或渲染 DOCX。可以渲染页面时，应逐页检查裁切、重叠、缺字、空白页、公式换行和图表可读性；单图 QA 通过不等于论文整页布局通过。
+9. 调用 `$mathmodel-verification` 完成最终验收，生成 `reports/VERIFY_REPORT.md`；Word 交付还应保留 `$export-math-docx` 的 JSON 验证报告。
 
 ## 文献检索与引用要求
 
@@ -65,6 +67,7 @@
 - `reports/PAPER_CONTENT_PLAN.md`：逐问论点、证据和章节映射；
 - `reports/PAPER_GRILL_REPORT.md`：论证计划与正文成稿两个门禁各 10 个用户问题及实际回答；
 - `reports/HUMANIZATION_REPORT.md`：中文论文执行语言润色时的范围、保护检查与风险记录；
+- 新建或重做高级配图时：可编辑源文件、PDF/SVG 矢量图、PNG 预览、Figure Contract 和 `figure-qa.json`；
 - 编译成功的最终 PDF，或无法编译时的明确原因；
 - 比赛要求 Word 时，提供包含原生 OMML 公式的最终 DOCX 和结构验证报告；
 - `reports/VERIFY_REPORT.md`：最终检查结论、修复项和未通过项。
@@ -75,6 +78,7 @@
 - 公式符号与建模报告一致，变量首次出现时有定义；
 - 所有数值和图表均来自 `RESULTS_REPORT.md` 或真实结果文件；
 - 图表编号、标题、引用和正文描述一致；
+- 由 Figure System 生成的图具有真实数据或结构语义来源、可编辑源文件、矢量输出和 Figure Contract；`figure-qa.json` 中的跳过项已补做或在最终报告中保留风险；
 - 引用真实存在，并且确实支持相邻论点；
 - 中文论文已记录正文起草与成稿润色两次调用，且没有改变数字、单位、公式、引用、结论强度、局限或 AI 使用披露；
 - 没有占位符、内部工作流说明、绝对路径或密钥；
@@ -96,11 +100,15 @@
 ```
 
 ```text
+请使用 $mathmodel-figure-templates，为这一节的核心结论生成 Nature 风格多 Panel 图或 TikZ 结构图，只使用已验证结果，保留 Figure Contract 和可编辑源文件，并执行 Figure QA。
+```
+
+```text
 请使用 $export-math-docx，将 paper.md 按比赛提供的 reference.docx 导出为最终 Word，确认全部 LaTeX 公式已成为原生 OMML，并生成转换验证报告。
 ```
 
 ## 协作边界
 
-- 缺少模型定义时返回建模手，缺少真实结果时返回编程手。
+- 缺少模型定义时返回建模手，缺少真实结果时返回编程手；图缺少可编辑源文件、Figure Contract 或 QA 证据时返回 Figure System 补齐。
 - 不修改模型结论来迎合叙事，不隐藏失败实验或模型限制。
 - 论文手可以独立用于已有结果的写作和文献工作；完整任务建议同时安装 `modeler` 和 `coder` 插件。

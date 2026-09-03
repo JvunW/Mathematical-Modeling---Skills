@@ -54,6 +54,7 @@
 
 ```text
 使用 $mathmodel-analysis，把这道题拆成可编码的模型方案。
+使用 $mathmodel-figure-templates，根据真实结果生成 Nature 风格数据图或 TikZ 结构图，并完成 Figure QA。
 使用 $mathmodel-verification，提交前验收这份论文及配套代码。
 ```
 
@@ -80,6 +81,7 @@
   → 用户逐题回答十问
   → mathmodel-analysis
   → mathmodel-coding
+  → mathmodel-figure-templates（按论证需要冻结 Figure Contract，路由引擎与风格并执行 Figure QA）
   → 结果冻结
   → mathmodel-writing-grill（内容计划用户强制十问）
   → mathmodel-writing + mathmodel-humanizer-zh（中文正文起草）
@@ -129,6 +131,8 @@ results/results_manifest.json        # 运行、指标、图表、表格和检�
 reports/paper_evidence_map.json       # 论文论点到结果/图表/引用的映射
 reports/verification.json             # 最终验收结论和未解决项
 ```
+
+由 `mathmodel-figure-templates` 生成的图还应保留可编辑源文件、矢量输出、PNG 预览、Figure Contract 和 `figure-qa.json`；被跳过的检查必须记录原因。
 
 对应 schema 位于 `schemas/`。破坏性 schema 变更必须升级主版本并提供迁移说明。
 
