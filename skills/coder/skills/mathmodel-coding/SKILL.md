@@ -317,6 +317,12 @@ def draw_three_dimensional_response_surface(
 - 时间问题：趋势图、首达时间分布和分组时点曲线。
 - 三维关系：三维散点图、响应曲面图、三维等高线图和三维敏感性图。
 
+### 7.2 sci-box 科研绘图模板
+
+当所需图型与 `sci-box` 模板接近时，读取 [references/scibox-figure-integration.md](references/scibox-figure-integration.md)，再调用 `$mathmodel-figure-templates` 中已经集成的模板。编程手仍负责准备真实结果数据、替换模板的演示数据、保存转换步骤和生成入口；模板选择、版式适配和 Figure QA 由 `$mathmodel-figure-templates` 负责。
+
+不得另外安装仓库中的 `scibox-figure` 副本：其 skill 名称同样是 `mathmodel-figure-templates`，会与现有增强版发生名称冲突。没有匹配模板时按现有绘图规范实现，不强行套用模板。
+
 结果完成后使用 `$mathmodel-workflow` 的 Runtime 注册必需结果。只有内容 hash 未变化、code/data/config/environment 指纹齐全且随机性策略已记录的结果才能冻结；冻结不等于验证正确，仍须通过后续论文和交付 Gate。
 
 ## 八、结果报告模板
@@ -388,6 +394,7 @@ def draw_three_dimensional_response_surface(
 - 流程图和架构图：交给 Draw.io 相关 skill；
 - 论文正文和排版：交给数学建模写作相关 skill；
 - TikZ、Nature/Science/IEEE/MCM/CUMCM 风格、多 Panel 组合与 Figure QA：交给 `$mathmodel-figure-templates`；本 skill 仍负责提供真实图表数据和可复现绘图入口；
+- SHAP、配对云雨图、交叉验证 ROC、Taylor 图、相关组合图、预测边缘分布、TPE 三维曲面、分组环形热图或 Nature 和弦图：按需读取 `references/scibox-figure-integration.md`，使用已集成的 `sci-box` 模板；
 - 最终交付：运行验证相关 skill，并把最新测试证据写入报告。
 
 编程手的最终判断标准是：代码能运行，结果有来源，约束已检查，图表可复现，命名和注释便于下一位成员接手。
